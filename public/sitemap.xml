@@ -26,17 +26,17 @@
             </url>
     <url>
     <loc>https://news.muni.ac.ug/article/muni-university-celebrates-10th-anniversary-with-grand-ceremony</loc>
-    <lastmod>2026-09-24T16:19:31+00:00</lastmod>
+    <lastmod>2026-09-24T17:36:11+00:00</lastmod>
     <priority>0.8</priority>
             </url>
     <url>
     <loc>https://news.muni.ac.ug/article/new-research-center-launched-to-tackle-health-challenges</loc>
-    <lastmod>2026-09-24T16:19:31+00:00</lastmod>
+    <lastmod>2026-09-24T17:39:18+00:00</lastmod>
     <priority>0.8</priority>
             </url>
     <url>
     <loc>https://news.muni.ac.ug/article/student-stories-from-village-to-university-excellence</loc>
-    <lastmod>2026-09-24T16:19:31+00:00</lastmod>
+    <lastmod>2026-09-24T17:38:06+00:00</lastmod>
     <priority>0.8</priority>
             </url>
     <url>
@@ -61,6 +61,10 @@
             </url>
     <url>
     <loc>https://news.muni.ac.ug/category/staff-stories</loc>
+    <priority>0.6</priority>
+            </url>
+    <url>
+    <loc>https://news.muni.ac.ug/event/freshers-ball</loc>
     <priority>0.6</priority>
             </url>
     <url>

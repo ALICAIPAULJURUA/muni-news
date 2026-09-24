@@ -10,16 +10,12 @@ class EventController extends Controller
 {
     public function index(): View
     {
-        $upcoming = Event::where('event_date', '>=', now())
-            ->orderBy('event_date')
-            ->paginate(9);
+        $events = Event::orderBy('event_date', 'desc')->paginate(9);
+        // Keep upcoming/past for backward compatibility with view if needed
+        $upcoming = $events;
+        $past = Event::where('event_date', '<', now())->orderByDesc('event_date')->take(6)->get();
 
-        $past = Event::where('event_date', '<', now())
-            ->orderByDesc('event_date')
-            ->take(6)
-            ->get();
-
-        return view('frontend.events.index', compact('upcoming', 'past'));
+        return view('frontend.events.index', compact('events', 'upcoming', 'past'));
     }
 
     public function show(string $slug): View

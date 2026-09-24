@@ -29,7 +29,7 @@ class NewsletterWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to Muni University News & Media Portal — Transforming Lives',
+            subject: 'Welcome to Muni University News & Media',
             from: new \Illuminate\Mail\Mailables\Address('info@muni.ac.ug', 'Muni University News & Media'),
         );
     }

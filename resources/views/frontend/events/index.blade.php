@@ -5,9 +5,9 @@
     <nav class="text-sm text-gray-500 mb-4"><a href="{{ url('/') }}" class="hover:text-[var(--muni-red)]">Home</a> <span class="mx-2">/</span> <span style="color: var(--muni-red-dark);">Events</span></nav>
     <h1 class="text-2xl font-bold mb-6" style="font-family:var(--font-heading); color: var(--muni-red-dark);"><i class="fa-solid fa-calendar-days me-2" style="color: var(--muni-red);"></i>Events</h1>
 
-    <h2 class="font-bold mb-4" style="color: var(--muni-red);">Upcoming Events</h2>
+    <h2 class="font-bold mb-4" style="color: var(--muni-red);">All Events</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-        @forelse($upcoming as $event)
+        @forelse(($events ?? $upcoming) as $event)
         <article class="card-muni">
             @if($event->featured_image)
                 <img loading="lazy" src="{{ asset('storage/' . $event->featured_image) }}" alt="{{ $event->title }}">
@@ -25,10 +25,10 @@
             </div>
         </article>
         @empty
-        <p class="col-span-3 text-center text-gray-500 py-8">No upcoming events.</p>
+        <p class="col-span-3 text-center text-gray-500 py-8">No events found.</p>
         @endforelse
     </div>
-    <div class="flex justify-center mb-8">{{ $upcoming->links('pagination::bootstrap-5') }}</div>
+    <div class="flex justify-center mb-8">{{ ($events ?? $upcoming)->links('pagination::bootstrap-5') }}</div>
 
     @if($past->count())
     <h3 class="font-bold mb-4" style="color: var(--muni-red-dark);">Past Events</h3>
