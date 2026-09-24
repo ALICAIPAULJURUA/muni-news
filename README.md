@@ -170,3 +170,4 @@ public/sitemap.xml
 
 ## License
 MIT — Muni University
+ muni-news

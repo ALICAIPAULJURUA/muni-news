@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/muni-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/muni-logo.png') }}">
     <title>{{ $meta_title ?? ($title ?? 'Muni University News & Media Portal') }} - {{ config('app.name', 'Muni University') }}</title>
     <meta name="description" content="{{ $meta_description ?? 'Transforming Lives - Official News Portal of Muni University, Arua City, Uganda' }}">
     <link rel="canonical" href="{{ url()->current() }}">

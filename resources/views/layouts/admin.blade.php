@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/muni-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/muni-logo.png') }}">
     <title>{{ $title ?? 'Admin' }} - {{ config('app.name', 'Muni University News & Media Portal') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +22,7 @@
         .btn-muni:hover{background:var(--muni-red-dark); color:#fff;} .sidebar-scroll::-webkit-scrollbar{width:6px;} .sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2); border-radius:3px;}
     </style>
 </head>
-<body class="bg-gray-100 antialiased" x-data="{ sidebarOpen:false }">
+<body class="bg-gray-100 antialiased" x-data="{ open: false }">
     <div class="flex min-h-screen">
         <aside class="hidden lg:flex lg:flex-shrink-0 w-64 sidebar-bg text-white flex-col fixed inset-y-0 z-30">
             <div class="flex items-center gap-3 px-6 py-5 border-b border-white/10" style="border-bottom:2px solid var(--muni-gold);">
@@ -44,7 +46,6 @@
                 <div>
                     <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider opacity-60">Media</p>
                     <a href="{{ route('admin.media.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm {{ request()->routeIs('admin.media.*') ? 'active' : '' }}"><i class="fa-solid fa-photo-film w-5 text-center"></i> Media Library</a>
-                    <a href="{{ route('gallery.index') }}" target="_blank" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-images w-5 text-center"></i> Gallery</a>
                 </div>
                 <div>
                     <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider opacity-60">Management</p>
@@ -65,20 +66,25 @@
             <div class="p-4 border-t border-white/10 text-xs opacity-60 text-center">&copy; {{ date('Y') }} Muni University<br>news.muni.ac.ug</div>
         </aside>
 
-        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-black/50 z-20 lg:hidden" @click="sidebarOpen=false"></div>
-        <aside x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-64 sidebar-bg text-white flex flex-col z-30 lg:hidden overflow-y-auto">
+        <div x-show="open" x-transition.opacity class="fixed inset-0 bg-black/50 z-20 lg:hidden" @click="open=false"></div>
+        <aside x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-64 sidebar-bg text-white flex flex-col z-30 lg:hidden overflow-y-auto">
             <div class="flex items-center justify-between px-6 py-5 border-b border-white/10" style="border-bottom:2px solid var(--muni-gold);">
                 <div class="flex items-center gap-3"><img src="/assets/images/muni-logo.png" alt="Muni Logo" class="h-10 w-10 object-contain bg-white rounded-sm p-1"><div><h2 class="font-bold text-sm">Muni University</h2><p class="text-xs tracking-widest uppercase opacity-80">Transforming Lives</p></div></div>
-                <button @click="sidebarOpen=false" class="p-2 rounded-sm hover:bg-white/10" aria-label="Close menu"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button @click="open=false" class="p-2 rounded-sm hover:bg-white/10" aria-label="Close menu"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <nav class="flex-1 py-4 px-3 space-y-1">
                 <a href="{{ route('admin.dashboard') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-gauge w-5"></i> Dashboard</a>
                 <a href="{{ route('admin.articles.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-newspaper w-5"></i> Articles</a>
                 <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-layer-group w-5"></i> Categories</a>
                 <a href="{{ route('admin.events.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-calendar-days w-5"></i> Events</a>
-                <a href="{{ route('admin.media.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-photo-film w-5"></i> Media Library</a>
+                <a href="{{ route('admin.newsletters.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-file-pdf w-5"></i> Newsletters</a>
+                <a href="{{ route('admin.downloads.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-download w-5"></i> Downloads</a>
                 <a href="{{ route('admin.users.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-users w-5"></i> Users</a>
+                <a href="{{ route('admin.media.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-photo-film w-5"></i> Media Library</a>
+                <a href="{{ route('admin.comments.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-comments w-5"></i> Comments</a>
+                <a href="{{ route('admin.subscribers.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-envelope w-5"></i> Subscribers</a>
                 <a href="{{ route('admin.settings.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-gear w-5"></i> Settings</a>
+                <a href="{{ route('admin.reports.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-chart-line w-5"></i> Reports</a>
             </nav>
         </aside>
 
@@ -86,19 +92,19 @@
             <header class="sticky top-0 z-10 bg-white admin-topbar shadow-sm">
                 <div class="flex items-center justify-between px-4 lg:px-6 py-3">
                     <div class="flex items-center gap-3">
-                        <button @click="sidebarOpen=!sidebarOpen" class="lg:hidden p-2 rounded-sm border border-gray-300 hover:bg-gray-50" aria-label="Toggle menu" style="min-width:44px; min-height:44px;"><i class="fa-solid fa-bars"></i></button>
+                        <button @click="open=!open" class="lg:hidden p-2 rounded-sm border border-gray-300 hover:bg-gray-50" aria-label="Toggle menu" style="min-width:44px; min-height:44px;"><i class="fa-solid fa-bars"></i></button>
                         <div class="hidden sm:block"><h1 class="text-lg font-bold" style="font-family:'Merriweather',serif; color: var(--muni-red);">@yield('header', 'Dashboard')</h1><p class="text-xs text-gray-500">Muni University News & Media Portal</p></div>
                     </div>
                     <div class="flex items-center gap-2 sm:gap-4">
                         <a href="{{ route('admin.articles.create') }}" class="hidden sm:inline-flex items-center gap-2 btn-muni px-4 py-2 text-xs"><i class="fa-solid fa-plus"></i> New Article</a>
                         <button class="relative p-2 text-gray-500 hover:text-[var(--muni-red)]" aria-label="Notifications" style="min-width:44px; min-height:44px;"><i class="fa-solid fa-bell text-lg"></i><span class="absolute top-1 right-1 w-2 h-2 rounded-full" style="background: var(--muni-gold);"></span></button>
-                        <div class="relative" x-data="{ open:false }">
-                            <button @click="open=!open" class="flex items-center gap-3 p-1 rounded-sm hover:bg-gray-50 border border-transparent hover:border-gray-200" style="min-height:44px;">
+                        <div class="relative" x-data="{ userMenuOpen: false }">
+                            <button @click="userMenuOpen=!userMenuOpen" class="flex items-center gap-3 p-1 rounded-sm hover:bg-gray-50 border border-transparent hover:border-gray-200" style="min-height:44px;">
                                 @if(auth()->user()->avatar)<img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar" class="w-8 h-8 rounded-full object-cover">@else<div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style="background: var(--muni-red);">{{ strtoupper(substr(auth()->user()->full_name ?? auth()->user()->username ?? 'A',0,1)) }}</div>@endif
                                 <div class="hidden sm:block text-left"><p class="text-sm font-semibold leading-none" style="color: var(--muni-red-dark);">{{ auth()->user()->full_name ?? auth()->user()->username }}</p><p class="text-xs text-gray-500 capitalize">{{ auth()->user()->getRoleNames()->first() ?? 'user' }}</p></div>
                                 <i class="fa-solid fa-chevron-down text-xs text-gray-400 hidden sm:block"></i>
                             </button>
-                            <div x-show="open" @click.away="open=false" x-transition class="absolute right-0 mt-2 w-56 bg-white rounded-sm shadow-lg border border-gray-200 py-2 z-50" style="border-top:3px solid var(--muni-gold);">
+                            <div x-show="userMenuOpen" @click.away="userMenuOpen=false" x-transition class="absolute right-0 mt-2 w-56 bg-white rounded-sm shadow-lg border border-gray-200 py-2 z-50" style="border-top:3px solid var(--muni-gold);">
                                 <div class="px-4 py-2 border-b border-gray-100"><p class="text-sm font-semibold">{{ auth()->user()->full_name }}</p><p class="text-xs text-gray-500">{{ auth()->user()->email }}</p></div>
                                 <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-user w-4"></i> Profile</a>
                                 <a href="{{ url('/') }}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-house w-4"></i> View Site</a>
