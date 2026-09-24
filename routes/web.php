@@ -19,7 +19,7 @@ Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/article/{slug}', [ArticleController::class, 'show'])->middleware('track.views')->name('article.show');
 Route::get('/category/{slug}', [ArticleController::class, 'category'])->name('category.show');
 Route::get('/newsletters', [NewsletterController::class, 'index'])->name('newsletters.index');
-Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events', [App\Http\Controllers\Frontend\EventController::class, 'index'])->name('events.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
 Route::get('/media-gallery', [MediaController::class, 'index'])->name('gallery.index');
 Route::get('/downloads', [DownloadController::class, 'index'])->name('downloads.index');

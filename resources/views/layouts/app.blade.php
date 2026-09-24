@@ -117,14 +117,14 @@
                 <nav class="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
                     <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
                     <a href="{{ route('news.index') }}" class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}">News</a>
-                    @php $navCats = \App\Models\Category::where('slug','!=','news')->orderBy('sort_order')->take(4)->get(); @endphp
+                    @php $navCats = \App\Models\Category::whereNotIn('slug',['news','events'])->orderBy('sort_order')->take(4)->get(); @endphp
                     @foreach($navCats as $cat)
                         <a href="{{ route('category.show', $cat->slug) }}" class="nav-link {{ request()->is('category/'.$cat->slug) ? 'active' : '' }}">{{ $cat->name }}</a>
                     @endforeach
                     <div class="relative" x-data="{ open:false }">
                         <button @click="open=!open" class="nav-link" aria-expanded="false" aria-haspopup="true">More <i class="fa-solid fa-chevron-down ms-1 text-xs"></i></button>
                         <div x-show="open" @click.away="open=false" x-transition class="absolute left-0 mt-2 w-48 bg-white rounded-sm shadow-lg border border-gray-200 py-2 z-50" style="border-top:3px solid var(--muni-gold);">
-                            @foreach(\App\Models\Category::where('slug','!=','news')->orderBy('sort_order')->skip(4)->take(10)->get() as $cat)
+                            @foreach(\App\Models\Category::whereNotIn('slug',['news','events'])->orderBy('sort_order')->skip(4)->take(10)->get() as $cat)
                                 <a href="{{ route('category.show', $cat->slug) }}" class="block px-4 py-2 text-sm hover:bg-gray-50">{{ $cat->name }}</a>
                             @endforeach
                             <div class="border-t my-1"></div>
@@ -160,7 +160,7 @@
                 <nav class="flex flex-col gap-1">
                     <a href="{{ url('/') }}" class="px-3 py-2 rounded-sm font-semibold hover:bg-gray-50 {{ request()->is('/') ? 'bg-gray-100' : '' }}">Home</a>
                     <a href="{{ route('news.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">News</a>
-                    @foreach(\App\Models\Category::where('slug','!=','news')->orderBy('sort_order')->get() as $cat)
+                    @foreach(\App\Models\Category::whereNotIn('slug',['news','events'])->orderBy('sort_order')->get() as $cat)
                         <a href="{{ route('category.show', $cat->slug) }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">• {{ $cat->name }}</a>
                     @endforeach
                     <a href="{{ route('events.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">Events</a>

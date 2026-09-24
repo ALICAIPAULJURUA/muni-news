@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class EventController extends Controller
 {
-    public function index(): View
+    public function index()
     {
         $events = \App\Models\Event::orderBy('event_date', 'desc')->paginate(9);
         return view('frontend.events.index', compact('events'));
