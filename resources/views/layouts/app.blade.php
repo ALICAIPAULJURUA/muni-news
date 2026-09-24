@@ -60,6 +60,16 @@
     </style>
     @stack('styles')
     @yield('head')
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'Organization',
+        'name' => 'Muni University',
+        'url' => 'https://news.muni.ac.ug',
+        'logo' => asset('assets/images/muni-logo.png'),
+        'sameAs' => ['https://www.muni.ac.ug', 'https://news.muni.ac.ug'],
+    ], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) !!}
+    </script>
 </head>
 <body class="antialiased bg-white" x-data="{ mobileMenu:false, searchOpen:false }">
     <!-- Top Bar -->

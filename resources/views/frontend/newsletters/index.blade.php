@@ -18,7 +18,7 @@
                 <article class="card-muni flex flex-col sm:flex-row">
                     <a href="{{ route('article.show', $article->slug) }}" class="sm:w-48 flex-shrink-0">
                         @if($article->featured_image)
-                            <img src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}" class="w-full h-32 sm:h-full object-cover">
+                            <img loading="lazy" src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}" class="w-full h-32 sm:h-full object-cover">
                         @else
                             <div class="w-full h-32 bg-gray-100 flex items-center justify-center"><i class="fa-solid fa-newspaper text-xl text-gray-400"></i></div>
                         @endif
@@ -59,7 +59,7 @@
                     <div class="p-4 flex gap-3 hover:bg-gray-50">
                         <div class="w-16 h-20 bg-gray-100 rounded-sm overflow-hidden flex-shrink-0 border">
                             @if($nl->cover_image)
-                                <img src="{{ asset('storage/' . $nl->cover_image) }}" alt="{{ $nl->title }}" class="w-full h-full object-cover">
+                                <img loading="lazy" src="{{ asset('storage/' . $nl->cover_image) }}" alt="{{ $nl->title }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-file-pdf text-xl" style="color: var(--muni-red);"></i></div>
                             @endif

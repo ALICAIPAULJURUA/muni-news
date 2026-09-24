@@ -67,10 +67,11 @@ class ArticleController extends Controller
             ->take(3)
             ->get();
 
-        // Breadcrumb and meta
+        // SEO meta + absolute OG image (critical for WhatsApp/FB)
         $meta_title = $article->meta_title ?: $article->title;
         $meta_description = $article->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($article->summary), 160);
+        $og_image = $article->featured_image ? asset('storage/' . $article->featured_image) : asset('assets/images/muni-logo.png');
 
-        return view('frontend.articles.show', compact('article', 'related', 'meta_title', 'meta_description'));
+        return view('frontend.articles.show', compact('article', 'related', 'meta_title', 'meta_description', 'og_image'));
     }
 }

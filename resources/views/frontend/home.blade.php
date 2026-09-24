@@ -11,7 +11,7 @@
                 <article class="card-muni h-full">
                     <a href="{{ route('article.show', $featuredArticle->slug) }}" class="block">
                         @if($featuredArticle->featured_image)
-                            <img src="{{ asset('storage/' . $featuredArticle->featured_image) }}" alt="{{ $featuredArticle->title }}" class="w-full" style="aspect-ratio:16/9; object-fit:cover;">
+                            <img loading="lazy" src="{{ asset('storage/' . $featuredArticle->featured_image) }}" alt="{{ $featuredArticle->title }}" class="w-full" style="aspect-ratio:16/9; object-fit:cover;">
                         @else
                             <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-image text-3xl text-gray-400"></i></div>
                         @endif
@@ -37,7 +37,7 @@
                 <article class="card-muni flex-1">
                     <a href="{{ route('article.show', $sec->slug) }}" class="block">
                         @if($sec->featured_image)
-                            <img src="{{ asset('storage/' . $sec->featured_image) }}" alt="{{ $sec->title }}" class="w-full" style="aspect-ratio:16/9;">
+                            <img loading="lazy" src="{{ asset('storage/' . $sec->featured_image) }}" alt="{{ $sec->title }}" class="w-full" style="aspect-ratio:16/9;">
                         @else
                             <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-image text-xl text-gray-400"></i></div>
                         @endif
@@ -67,7 +67,7 @@
             <article class="card-muni">
                 <a href="{{ route('article.show', $article->slug) }}">
                     @if($article->featured_image)
-                        <img src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}">
+                        <img loading="lazy" src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}">
                     @else
                         <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-image text-2xl text-gray-400"></i></div>
                     @endif
@@ -101,7 +101,7 @@
                 <article class="card-muni snap-start flex-shrink-0" style="width: 300px;">
                     <a href="{{ route('article.show', $art->slug) }}">
                         @if($art->featured_image)
-                            <img src="{{ asset('storage/' . $art->featured_image) }}" alt="{{ $art->title }}">
+                            <img loading="lazy" src="{{ asset('storage/' . $art->featured_image) }}" alt="{{ $art->title }}">
                         @else
                             <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-image"></i></div>
                         @endif

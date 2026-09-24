@@ -9,7 +9,7 @@
         @forelse($media as $item)
         <div class="card-muni cursor-pointer group" @click="lightbox=true; src='{{ asset('storage/' . $item->path) }}'">
             @if(str_starts_with($item->mime_type, 'image/'))
-                <img src="{{ asset('storage/' . $item->path) }}" alt="{{ $item->original_name }}" class="group-hover:opacity-90 transition">
+                <img loading="lazy" src="{{ asset('storage/' . $item->path) }}" alt="{{ $item->original_name }}" class="group-hover:opacity-90 transition">
             @else
                 <div class="w-full flex flex-col items-center justify-center py-8" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);">
                     <i class="fa-solid fa-file text-2xl text-gray-400"></i><span class="text-xs mt-2">{{ $item->extension }}</span>
@@ -26,7 +26,7 @@
 
         <!-- Lightbox -->
         <div x-show="lightbox" x-transition class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" @click="lightbox=false" style="display:none;">
-            <img :src="src" alt="Preview" class="max-w-full max-h-[90vh] rounded-sm shadow-lg">
+            <img loading="lazy" :src="src" alt="Preview" class="max-w-full max-h-[90vh] rounded-sm shadow-lg">
             <button class="absolute top-4 right-4 text-white text-2xl" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
         </div>
     </div>

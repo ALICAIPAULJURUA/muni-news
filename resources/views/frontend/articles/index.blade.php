@@ -33,7 +33,7 @@
         <article class="card-muni">
             <a href="{{ route('article.show', $article->slug) }}">
                 @if($article->featured_image)
-                    <img src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}">
+                    <img loading="lazy" src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}">
                 @else
                     <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-image text-2xl text-gray-400"></i></div>
                 @endif

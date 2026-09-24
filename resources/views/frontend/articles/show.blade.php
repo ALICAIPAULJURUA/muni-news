@@ -25,7 +25,7 @@
 
             @if($article->featured_image)
             <figure class="mb-6">
-                <img src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}" class="w-full rounded-sm shadow-md" style="max-height:500px; object-fit:cover;">
+                <img loading="lazy" src="{{ asset('storage/' . $article->featured_image) }}" alt="{{ $article->title }}" class="w-full rounded-sm shadow-md" style="max-height:500px; object-fit:cover;">
                 <figcaption class="text-xs text-gray-500 mt-2 text-center">{{ $article->title }}</figcaption>
             </figure>
             @endif
@@ -76,7 +76,7 @@
                         <a href="{{ route('article.show', $rel->slug) }}" class="flex gap-3 p-4 hover:bg-gray-50">
                             <div class="w-20 h-16 bg-gray-200 rounded-sm overflow-hidden flex-shrink-0">
                                 @if($rel->featured_image)
-                                    <img src="{{ asset('storage/' . $rel->featured_image) }}" alt="" class="w-full h-full object-cover">
+                                    <img loading="lazy" src="{{ asset('storage/' . $rel->featured_image) }}" alt="" class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-image text-gray-400"></i></div>
                                 @endif
@@ -114,4 +114,35 @@
         </aside>
     </div>
 </div>
+
+@push('scripts')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'NewsArticle',
+    'headline' => $article->title,
+    'description' => $meta_description,
+    'image' => $og_image,
+    'author' => ['@type' => 'Person', 'name' => $article->author->full_name ?? $article->author->username],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => 'Muni University',
+        'logo' => ['@type' => 'ImageObject', 'url' => asset('assets/images/muni-logo.png')]
+    ],
+    'datePublished' => $article->published_at?->toIso8601String() ?? $article->created_at->toIso8601String(),
+    'dateModified' => $article->updated_at->toIso8601String(),
+    'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => url()->current()],
+], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) !!}
+</script>
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Organization',
+    'name' => 'Muni University',
+    'url' => 'https://news.muni.ac.ug',
+    'logo' => asset('assets/images/muni-logo.png'),
+    'sameAs' => ['https://www.muni.ac.ug'],
+], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) !!}
+</script>
+@endpush
 @endsection

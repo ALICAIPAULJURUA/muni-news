@@ -1,66 +1,172 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Muni University News & Media Portal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Institutional-grade news portal for **Muni University** (Arua City, Uganda) — `news.muni.ac.ug` — built with Laravel 11.
 
-## About Laravel
+## Branding
+- **Primary Red:** `#8B0000` `--muni-red`
+- **Dark Red:** `#5C0000` `--muni-red-dark`
+- **Gold:** `#ffde00` `--muni-gold`
+- **Blue:** `#24AAE1` `--muni-blue`
+- **Fonts:** Merriweather (headings) + Source Sans Pro (body)
+- **Logo:** `/public/assets/images/muni-logo.png`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
+- **Backend:** Laravel 11 (PHP 8.2+), MySQL 8 (SQLite for dev), `spatie/laravel-permission` 6.25, `intervention/image` 3.11, `spatie/laravel-sitemap` 8.0, Laravel Breeze 2.4 (Blade)
+- **Frontend:** Blade components, Bootstrap 5.3, Tailwind 3.x, Alpine.js 3, Font Awesome 6.4, Vite 5, TinyMCE 6 CDN
+- **Storage:** `storage/app/public` with symlink `public/storage`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Quick Start
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+git clone https://github.com/ALICAIPAULJURUA/muni-news.git
+cd muni-news
+composer install
+cp .env.example .env
+php artisan key:generate
 
-## Learning Laravel
+# Configure DB in .env (SQLite default: touch database/database.sqlite)
+# For MySQL:
+# DB_CONNECTION=mysql
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+# DB_DATABASE=muni_news
+# DB_USERNAME=root
+# DB_PASSWORD=
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Storage link
+php artisan storage:link
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Migrate & seed (creates super_admin, roles, categories, settings)
+php artisan migrate --seed
+# or fresh
+php artisan migrate:fresh --seed
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Frontend assets
+npm install
+npm run build   # or npm run dev for Vite dev server
 
-## Laravel Sponsors
+# Sitemap (public/sitemap.xml)
+php artisan sitemap:generate
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+php artisan serve
+# http://localhost:8000
+# Admin: http://localhost:8000/admin/dashboard
+# Login: admin@muni.ac.ug / password
+```
 
-### Premium Partners
+## Default Seeded Data
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+**Super Admin**
+- `admin@muni.ac.ug` / `password`
+- `username: admin, full_name: Super Admin, is_active: true`
 
-## Contributing
+**Roles & Permissions** (spatie)
+- `super_admin` — all 8 permissions
+- `comm_admin` — all except `manage users`
+- `editor` — `publish articles, create drafts, moderate comments, view analytics, upload media`
+- `viewer` — no permissions
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Matrix: `manage users | manage settings | manage categories | publish articles | create drafts | moderate comments | view analytics | upload media`
 
-## Code of Conduct
+**Categories** (6)
+`News`, `Announcements`, `Events`, `Research`, `Student Stories`, `Staff Stories`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Settings** (`settings` table key-value)
+`site_name: Muni University News & Media Portal`, `site_tagline: Transforming Lives`, `site_domain: news.muni.ac.ug`, `primary_color: #8B0000` etc
 
-## Security Vulnerabilities
+## Environment
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```env
+APP_NAME="Muni University News & Media Portal"
+APP_URL=https://news.muni.ac.ug
+APP_ENV=production
+DB_CONNECTION=mysql
+
+FILESYSTEM_DISK=public
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.muni.ac.ug
+MAIL_PORT=587
+MAIL_USERNAME=...
+MAIL_FROM_ADDRESS=info@muni.ac.ug
+```
+
+## Key Features
+
+**Public Frontend** (`app/Http/Controllers/Frontend/`)
+- `/` — Hero Grid (2fr large + 2 stacked secondary), Latest 3-col, Breaking ticker (`is_breaking`), Category horizontal scroll, Newsletter CTA
+- `/news` + `/category/{slug}` — 3-col card grid, filter bar (search `q`, category dropdown), pagination `bootstrap-5`, 16:9 images, 2-line title clamp
+- `/article/{slug}` — 65/35 layout (65% content / 35% sticky sidebar), breadcrumb, immersive header, `max-width:75ch` `line-height:1.8`, lead gold border, blockquote red border italic, related 3, tags, share (FB,X,LinkedIn,WhatsApp,Email)
+- `/newsletters` — 2-col (articles left, PDF sidebar right with year filter 2-col button grid)
+- `/events`, `/event/{slug}`, `/media-gallery` (Alpine lightbox), `/downloads`, `/page/{slug}`
+
+**Device-Based View Counting** (`app/Http/Middleware/TrackViewMiddleware.php`)
+- `fingerprint = sha256(IP + User-Agent)`
+- If `article_id + fingerprint` exists in last 24h → skip else `increment(views)` + insert `article_views`
+
+**Admin Panel** (`/admin` — `role:super_admin|comm_admin|editor` + granular)
+- `admin/dashboard` — stat cards (articles/views/comments/subscribers), recent 5
+- `admin/articles` — filterable table, TinyMCE (`/admin/upload-image` CSRF, validates MIME `jpeg,png,gif,webp,svg` 5MB, stores `storage/app/public/articles/`, returns `{location}`), CRUD with tags, featured/breaking/published, SEO
+- `admin/categories` — tree view nested, sort_order
+- `admin/events`, `admin/newsletters` (PDF 10MB), `admin/downloads` (10MB)
+- `admin/users` — super_admin only, role assignment, toggle `is_active`
+- `admin/media` — grid, bulk delete, `files.*` 5MB whitelist `Str::slug`
+- `admin/comments` — pending/approved tabs, approve/delete
+- `admin/subscribers` — export CSV, delete
+- `admin/settings` — General/SEO/Email SMTP + test button
+- `admin/reports` — analytics (top 5, views by day, category stats)
+
+**Security**
+- `@csrf` on all forms, `throttle:3,1` subscribe, `throttle:5,1` login (LoginRequest 5/min), Form Requests, whitelist MIME + real `getMimeType()`, `Str::slug` sanitize, Blade `{{ }}` escape, `hasAnyRole`, `is_active` check in `RoleMiddleware`
+
+**SEO**
+- Clean URLs `/article/{slug}`, canonical `url()->current()` in `layouts/app.blade.php`, per-page `meta_title`/`meta_description`/`og:image` absolute `asset('storage/...')` (WhatsApp/FB), Twitter card, Organization + NewsArticle JSON-LD (`resources/views/frontend/articles/show.blade.php` + `layouts/app`), `public/sitemap.xml` via `php artisan sitemap:generate` (28 URLs), `loading="lazy"` on card images, Vite minified
+
+## Testing
+
+```bash
+php artisan test
+# 34 tests (Auth, Profile, AdminPanel)
+php artisan test --filter=AdminPanel
+# Covers: dashboard auth 403, super_admin/editor/comm_admin, TinyMCE, image upload, article create
+```
+
+Manual checks:
+- Login with `admin@muni.ac.ug` → `/admin/dashboard` 200, viewer → 403
+- Subscribe `POST /subscribe` duplicate → validation error, throttle 3/min
+- `GET /article/{slug}` increments `views` once per 24h fingerprint
+
+## Deployment (Ubuntu + Nginx example)
+
+```bash
+composer install --no-dev --optimize-autoloader
+npm run build
+php artisan migrate --force
+php artisan storage:link
+php artisan sitemap:generate
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Ensure writable
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache public/build
+
+# Cron for sitemap daily
+# 0 2 * * * cd /var/www/muni-news && php artisan sitemap:generate >> /dev/null 2>&1
+
+# Nginx: point to /public, php-fpm 8.2, force https news.muni.ac.ug
+```
+
+## Folder Structure
+```
+app/Http/Controllers/Admin (Article, Category, Event, NewsletterAdmin, DownloadAdmin, User, MediaLibrary, Comment, Subscriber, Setting, Report, Dashboard)
+app/Http/Controllers/Frontend (Home, Article, Newsletter, Event, Media, Download, Page, Subscribe)
+app/Http/Middleware (RoleMiddleware, TrackViewMiddleware)
+app/Services/ImageService
+resources/views/layouts/{app,admin,auth} + frontend/* + admin/*
+public/assets/images/muni-logo.png
+public/sitemap.xml
+```
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT — Muni University

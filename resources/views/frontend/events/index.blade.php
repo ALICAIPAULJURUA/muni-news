@@ -10,7 +10,7 @@
         @forelse($upcoming as $event)
         <article class="card-muni">
             @if($event->featured_image)
-                <img src="{{ asset('storage/' . $event->featured_image) }}" alt="{{ $event->title }}">
+                <img loading="lazy" src="{{ asset('storage/' . $event->featured_image) }}" alt="{{ $event->title }}">
             @else
                 <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-calendar text-2xl text-gray-400"></i></div>
             @endif
