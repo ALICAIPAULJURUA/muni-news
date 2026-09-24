@@ -7,7 +7,7 @@
 
     <h2 class="font-bold mb-4" style="color: var(--muni-red);">All Events</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-        @forelse(($events ?? $upcoming) as $event)
+        @forelse($events as $event)
         <article class="card-muni">
             @if($event->featured_image)
                 <img loading="lazy" src="{{ asset('storage/' . $event->featured_image) }}" alt="{{ $event->title }}">
@@ -25,22 +25,10 @@
             </div>
         </article>
         @empty
-        <p class="col-span-3 text-center text-gray-500 py-8">No events found.</p>
+        <p>No events found. (Check if database has records)</p>
         @endforelse
     </div>
-    <div class="flex justify-center mb-8">{{ ($events ?? $upcoming)->links('pagination::bootstrap-5') }}</div>
+    <div class="flex justify-center mb-8">{{ $events->links('pagination::bootstrap-5') }}</div>
 
-    @if($past->count())
-    <h3 class="font-bold mb-4" style="color: var(--muni-red-dark);">Past Events</h3>
-    <div class="grid md:grid-cols-3 gap-4">
-        @foreach($past as $event)
-        <a href="{{ route('event.show', $event->slug) }}" class="card-muni p-4 hover:bg-gray-50">
-            <p class="text-xs text-gray-500">{{ $event->event_date->format('M d, Y') }}</p>
-            <h4 class="font-semibold text-sm mt-1 hover:text-[var(--muni-red)]">{{ $event->title }}</h4>
-            <p class="text-xs text-gray-500 mt-1">{{ $event->location }}</p>
-        </a>
-        @endforeach
-    </div>
-    @endif
 </div>
 @endsection

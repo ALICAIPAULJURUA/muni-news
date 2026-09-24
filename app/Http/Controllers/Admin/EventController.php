@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class EventController extends Controller
         if($request->hasFile('featured_image')){
             $data['featured_image']=$imageService->storeImage($request->file('featured_image'),'events');
         }
-        Event::create($data);
+        $event = Event::create($data);
+        Log::info('Event saved:', $event->toArray());
         return redirect()->route('admin.events.index')->with('success','Event created.');
     }
     public function edit(Event $event): View { return view('admin.events.edit', compact('event')); }
