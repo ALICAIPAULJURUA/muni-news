@@ -60,7 +60,7 @@
         <div class="lg:col-span-2 bg-white rounded-sm shadow-sm">
             <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between" style="border-bottom: 2px solid var(--muni-gold); background: var(--muni-red-dark);">
                 <h3 class="font-semibold text-white" style="font-family:'Merriweather',serif;">Recent Articles</h3>
-                <a href="#" class="text-xs text-white/80 hover:text-white underline">View all</a>
+                <a href="{{ route('admin.articles.index') }}" class="text-xs text-white/80 hover:text-white underline">View all</a>
             </div>
             <div class="divide-y divide-gray-100">
                 @forelse($recentArticles ?? [] as $article)
@@ -90,16 +90,16 @@
         <div class="bg-white rounded-sm shadow-sm p-6">
             <h3 class="font-semibold mb-4" style="font-family:'Merriweather',serif; color: var(--muni-red);">Quick Actions</h3>
             <div class="space-y-3">
-                <a href="#" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm border-2 font-semibold text-sm transition" style="border-color: var(--muni-red); color: var(--muni-red);">
+                <a href="{{ route('admin.articles.create') }}" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm border-2 font-semibold text-sm transition" style="border-color: var(--muni-red); color: var(--muni-red);">
                     <i class="fa-solid fa-plus"></i> New Article
                 </a>
-                <a href="#" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm bg-gray-50 border border-gray-200 hover:bg-gray-100 text-sm">
+                <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm bg-gray-50 border border-gray-200 hover:bg-gray-100 text-sm">
                     <i class="fa-solid fa-layer-group" style="color: var(--muni-blue);"></i> Manage Categories
                 </a>
-                <a href="#" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm bg-gray-50 border border-gray-200 hover:bg-gray-100 text-sm">
+                <a href="{{ route('admin.media.index') }}" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm bg-gray-50 border border-gray-200 hover:bg-gray-100 text-sm">
                     <i class="fa-solid fa-photo-film" style="color: var(--muni-gold);"></i> Media Library
                 </a>
-                <a href="#" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm bg-gray-50 border border-gray-200 hover:bg-gray-100 text-sm">
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 w-full px-4 py-3 rounded-sm bg-gray-50 border border-gray-200 hover:bg-gray-100 text-sm">
                     <i class="fa-solid fa-users" style="color: var(--muni-red);"></i> Manage Users
                 </a>
             </div>
