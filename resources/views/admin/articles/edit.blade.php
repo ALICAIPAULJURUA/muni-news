@@ -67,7 +67,7 @@
 </div>
 </form>
 
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/x5hqufi1enf2ifu5yp46yk0uqiixtpbk6bzm5u1kh6pthrp0/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
     const form = document.querySelector('form');
@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 tinymce.init({
     selector: '#content',
+    license_key: 'gpl',
     plugins: ['advlist','autolink','lists','link','image','charmap','preview','anchor','searchreplace','visualblocks','code','fullscreen','insertdatetime','media','table','wordcount','codesample','paste'],
     toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link image media table | removeformat | code',
     images_upload_url: '{{ route('admin.upload-image') }}',

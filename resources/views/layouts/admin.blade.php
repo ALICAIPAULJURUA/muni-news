@@ -15,11 +15,18 @@
     <style>
         :root { --muni-red:#8B0000; --muni-red-dark:#5C0000; --muni-gold:#ffde00; --muni-blue:#24AAE1; }
         body{font-family:'Source Sans Pro',system-ui,sans-serif;} h1,h2,h3,h4,h5,h6{font-family:'Merriweather',Georgia,serif;}
-        .sidebar-bg{background:var(--muni-red-dark);} .sidebar-link{transition:all 150ms ease-in-out; border-left:3px solid transparent;}
+        .sidebar-bg{background:var(--muni-red-dark);} .sidebar-link{transition:all 150ms ease-in-out; border-left:3px solid transparent; padding: 0.75rem 1.25rem !important;}
         .sidebar-link:hover{background:rgba(255,255,255,0.08); border-left-color:var(--muni-gold);}
         .sidebar-link.active{background:var(--muni-red); border-left-color:var(--muni-gold);}
-        .admin-topbar{border-bottom:3px solid var(--muni-gold);} .btn-muni{background:var(--muni-red); color:#fff; border-radius:2px; text-transform:uppercase; font-weight:600; letter-spacing:0.5px; min-height:44px;}
-        .btn-muni:hover{background:var(--muni-red-dark); color:#fff;} .sidebar-scroll::-webkit-scrollbar{width:6px;} .sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2); border-radius:3px;}
+        .admin-topbar{border-bottom:3px solid var(--muni-gold);} .btn-muni{background:var(--muni-red); color:#fff; border-radius:2px; text-transform:uppercase; font-weight:600; letter-spacing:0.5px; min-height:44px; padding: 0.75rem 1.5rem !important;}
+        .btn-muni:hover{background:var(--muni-red-dark); color:#fff;}
+        .btn, button.btn, a.btn { padding: 0.75rem 1.5rem !important; }
+        .card-body { padding: 1.5rem; }
+        @media (min-width: 1024px) { .card-body { padding: 2rem; } }
+        table th, table td { padding: 1rem 1.25rem !important; }
+        .form-control, .form-select, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="datetime-local"], textarea, select { padding: 0.75rem 1rem !important; border: 1px solid #e2e8f0 !important; transition: all 150ms ease-in-out; border-radius:2px !important; }
+        .form-control:focus, .form-select:focus, input:focus, textarea:focus, select:focus { border-color: var(--muni-blue) !important; box-shadow: 0 0 0 3px rgba(36,170,225,0.15) !important; outline: none !important; }
+        .sidebar-scroll::-webkit-scrollbar{width:6px;} .sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2); border-radius:3px;}
     </style>
 </head>
 <body class="bg-gray-100 antialiased" x-data="{ open: false }">
