@@ -117,6 +117,7 @@
                 <nav class="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
                     <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
                     <a href="{{ route('news.index') }}" class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}">News</a>
+                    <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}"><i class="fa-solid fa-calendar-days me-1 text-xs"></i> Events</a>
                     @php $navCats = \App\Models\Category::whereNotIn('slug',['news','events'])->orderBy('sort_order')->take(4)->get(); @endphp
                     @foreach($navCats as $cat)
                         <a href="{{ route('category.show', $cat->slug) }}" class="nav-link {{ request()->is('category/'.$cat->slug) ? 'active' : '' }}">{{ $cat->name }}</a>
@@ -128,7 +129,6 @@
                                 <a href="{{ route('category.show', $cat->slug) }}" class="block px-4 py-2 text-sm hover:bg-gray-50">{{ $cat->name }}</a>
                             @endforeach
                             <div class="border-t my-1"></div>
-                            <a href="{{ route('events.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-calendar-days me-2"></i>Events</a>
                             <a href="{{ route('newsletters.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-file-pdf me-2"></i>Newsletters</a>
                             <a href="{{ route('downloads.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-download me-2"></i>Downloads</a>
                             <a href="{{ route('gallery.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-images me-2"></i>Gallery</a>
