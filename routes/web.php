@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\EventController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\MediaController;
 use App\Http\Controllers\Frontend\NewsletterController;
+use App\Http\Controllers\Frontend\CommentController as FrontendCommentController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SubscribeController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,7 @@ Route::get('/media-gallery', [MediaController::class, 'index'])->name('gallery.i
 Route::get('/downloads', [DownloadController::class, 'index'])->name('downloads.index');
 Route::get('/downloads/{download}/file', [DownloadController::class, 'download'])->name('downloads.download');
 Route::post('/subscribe', [SubscribeController::class, 'store'])->middleware('throttle:3,1')->name('subscribe');
+Route::post('/comments', [FrontendCommentController::class, 'store'])->name('comments.store');
 // Static pages: about, contact, etc.
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/about', fn() => app(PageController::class)->show('about'))->name('about');
@@ -39,6 +41,7 @@ Route::middleware(['auth', 'role:super_admin|comm_admin|editor'])->prefix('admin
 
     // Articles - all editors can manage
     Route::post('/upload-image', [\App\Http\Controllers\Admin\ArticleController::class, 'uploadImage'])->name('upload-image');
+    Route::get('/articles/{article}/preview', [\App\Http\Controllers\Admin\ArticleController::class, 'preview'])->name('articles.preview');
     Route::resource('articles', \App\Http\Controllers\Admin\ArticleController::class)->only(['index','create','store','edit','update','destroy']);
 
     // Categories - only super_admin & comm_admin

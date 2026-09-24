@@ -130,5 +130,30 @@
             <footer class="bg-white border-t border-gray-200 px-6 py-3 text-center text-xs text-gray-500">&copy; {{ date('Y') }} Muni University &mdash; Transforming Lives | news.muni.ac.ug | Admin Panel</footer>
         </div>
     </div>
+    <button id="scrollToTop" class="fixed bottom-6 right-6 bg-[#8B0000] text-white p-3 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 hover:bg-[#5C0000]" aria-label="Scroll to top" style="position: fixed; bottom: 24px; right: 24px; background: #8B0000; color: white; padding: 12px; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 9999; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: none;">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('scrollToTop');
+            if(!btn) return;
+            window.addEventListener('scroll', function() {
+                if(window.scrollY > 300){
+                    btn.classList.remove('opacity-0','pointer-events-none');
+                    btn.classList.add('opacity-100','pointer-events-auto');
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                } else {
+                    btn.classList.add('opacity-0','pointer-events-none');
+                    btn.classList.remove('opacity-100','pointer-events-auto');
+                    btn.style.opacity = '0';
+                    btn.style.pointerEvents = 'none';
+                }
+            });
+            btn.addEventListener('click', function(){
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -127,6 +127,24 @@ class ArticleController extends Controller
         return redirect()->route('admin.articles.index')->with('success','Article updated successfully.');
     }
 
+    public function preview(Article $article): View
+    {
+        $article->load(['category','author','tags','comments' => fn($q) => $q->where('is_approved', true)->latest()]);
+        $related = Article::with(['category'])
+            ->where('is_published', true)
+            ->where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+
+        $meta_title = $article->meta_title ?: $article->title;
+        $meta_description = $article->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($article->summary), 160);
+        $og_image = $article->featured_image ? asset('storage/' . $article->featured_image) : asset('assets/images/muni-logo.png');
+
+        return view('admin.articles.preview', compact('article','related','meta_title','meta_description','og_image'));
+    }
+
     public function destroy(Article $article): RedirectResponse
     {
         $article->delete();

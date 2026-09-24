@@ -61,7 +61,10 @@
             <p class="text-xs text-gray-500 mt-2">Max 5MB. Allowed: jpeg,png,jpg,gif,webp,svg. Stored to /storage/app/public/articles/</p>
         </div>
 
-        <button type="submit" class="btn-muni w-full">Create Article</button>
+        <div class="flex gap-2">
+            <button type="submit" class="btn-muni flex-1">Create Article</button>
+            <a href="#" onclick="alert('Save as draft first, then use Preview on edit page'); return false;" class="flex-1 text-center px-4 py-3 rounded-sm border-2 font-bold text-sm flex items-center justify-center" style="border-color: var(--muni-gold); color: var(--muni-red-dark); background: #fff; min-height:44px; border-radius:2px;"><i class="fa-solid fa-eye me-1"></i> Preview</a>
+        </div>
         <a href="{{ route('admin.articles.index') }}" class="block text-center text-sm underline">Cancel</a>
     </div>
 </div>

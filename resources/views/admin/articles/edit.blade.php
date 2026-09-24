@@ -61,8 +61,11 @@
             <p class="text-xs text-gray-500 mt-2">Leave empty to keep existing. Max 5MB.</p>
         </div>
 
-        <button type="submit" class="btn-muni w-full">Update Article</button>
-        <a href="{{ route('admin.articles.index') }}" class="block text-center text-sm underline">Cancel</a>
+        <div class="flex gap-2">
+            <button type="submit" class="btn-muni flex-1">Update Article</button>
+            <a href="{{ route('admin.articles.preview', $article) }}" target="_blank" class="flex-1 text-center px-4 py-3 rounded-sm border-2 font-bold text-sm flex items-center justify-center" style="border-color: var(--muni-gold); color: var(--muni-red-dark); background: #fff; min-height:44px; border-radius:2px;"><i class="fa-solid fa-eye me-1"></i> Preview</a>
+        </div>
+        <a href="{{ route('admin.articles.index') }}" class="block text-center text-sm underline mt-2">Cancel</a>
     </div>
 </div>
 </form>
