@@ -263,7 +263,7 @@
             <div>
                 <h4 class="font-bold mb-3" style="color: var(--muni-gold);">Categories</h4>
                 <ul class="space-y-2 text-sm">
-                    @foreach(\App\Models\Category::orderBy('sort_order')->take(6)->get() as $cat)
+                    @foreach(\App\Models\Category::whereNotIn('slug',['news','events'])->orderBy('sort_order')->take(6)->get() as $cat)
                         <li><a href="{{ route('category.show', $cat->slug) }}">{{ $cat->name }}</a></li>
                     @endforeach
                 </ul>

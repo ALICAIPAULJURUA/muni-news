@@ -49,10 +49,13 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        // Category highlights: each category with 4 latest
+        // Category highlights: each category with 4 latest (exclude events, which has its own page)
         $categories = Category::with(['articles' => function ($q) {
             $q->where('is_published', true)->latest('published_at')->take(4);
-        }])->orderBy('sort_order')->get();
+        }])
+            ->whereNotIn('slug', ['news', 'events'])
+            ->orderBy('sort_order')
+            ->get();
 
         return view('frontend.home', compact(
             'featuredArticle',
