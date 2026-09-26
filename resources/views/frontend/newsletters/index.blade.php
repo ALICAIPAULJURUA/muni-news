@@ -58,17 +58,22 @@
                     @forelse($newsletters as $nl)
                     <div class="p-4 flex gap-3 hover:bg-gray-50">
                         <div class="w-16 h-20 bg-gray-100 rounded-sm overflow-hidden flex-shrink-0 border">
-                            @if($nl->cover_image)
-                                <img loading="lazy" src="{{ asset('storage/' . $nl->cover_image) }}" alt="{{ $nl->title }}" class="w-full h-full object-cover">
+                            @if($nl->image())
+                                <a href="{{ route('newsletters.show', $nl->slug) }}"><img loading="lazy" src="{{ asset('storage/' . $nl->image()) }}" alt="{{ $nl->title }}" class="w-full h-full object-cover"></a>
                             @else
                                 <div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-file-pdf text-xl" style="color: var(--muni-red);"></i></div>
                             @endif
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-bold leading-tight line-clamp-2">{{ $nl->title }}</h4>
+                            <h4 class="text-sm font-bold leading-tight line-clamp-2"><a href="{{ route('newsletters.show', $nl->slug) }}" class="hover:text-[var(--muni-red)]">{{ $nl->title }}</a></h4>
                             <p class="text-xs text-gray-500 mt-1">{{ $nl->publication_year }} • <i class="fa-solid fa-download me-1"></i>{{ $nl->download_count }} downloads</p>
                             <p class="text-xs text-gray-600 mt-1 line-clamp-2">{{ $nl->description }}</p>
-                            <a href="{{ asset('storage/' . $nl->file_path) }}" target="_blank" class="inline-flex items-center gap-1 mt-2 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-sm" style="background: var(--muni-red); color:#fff;"><i class="fa-solid fa-download"></i> PDF</a>
+                            <div class="flex gap-2 mt-2">
+                                <a href="{{ route('newsletters.show', $nl->slug) }}" class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-sm" style="background: var(--muni-blue); color:#fff;"><i class="fa-solid fa-book-open"></i> Read</a>
+                                @if($nl->file_path)
+                                <a href="{{ route('newsletters.download', $nl) }}" target="_blank" class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-sm" style="background: var(--muni-red); color:#fff;"><i class="fa-solid fa-download"></i> PDF</a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                     @empty

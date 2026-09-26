@@ -43,6 +43,11 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
+        $latestNewsletters = \App\Models\Newsletter::published()
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
         $breakingArticles = Article::where('is_breaking', true)
             ->where('is_published', true)
             ->latest('published_at')
@@ -61,6 +66,7 @@ class HomeController extends Controller
             'featuredArticle',
             'secondaryArticles',
             'latestNews',
+            'latestNewsletters',
             'breakingArticles',
             'categories'
         ));

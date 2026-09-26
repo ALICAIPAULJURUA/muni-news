@@ -22,7 +22,21 @@
                 @forelse($comments as $comment)
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-3">
-                        <a href="{{ route('article.show', $comment->article->slug) }}" target="_blank class="font-semibold hover:text-[var(--muni-red)]" style="color: var(--muni-red-dark);">{{ Str::limit($comment->article->title,30) }}</a>
+                        @if($comment->commentable)
+                            @if(method_exists($comment->commentable, 'slug'))
+                                <a href="{{ route($comment->commentable instanceof \App\Models\Article ? 'article.show' : 'newsletters.show', $comment->commentable->slug) }}" target="_blank" class="font-semibold hover:text-[var(--muni-red)]" style="color: var(--muni-red-dark);">{{ Str::limit($comment->commentable->title,30) }}</a>
+                            @else
+                                <span class="font-semibold" style="color: var(--muni-red-dark);">{{ Str::limit($comment->commentable->title,30) }}</span>
+                            @endif
+                            <div class="text-xs text-gray-500 mt-1">
+                                <span class="uppercase">{{ class_basename($comment->commentable_type) }}</span>
+                                @if($comment->commentable instanceof \App\Models\Newsletter && $comment->commentable->is_published)
+                                    <a href="{{ route('newsletters.show', $comment->commentable->slug) }}" class="text-xs hover:text-[var(--muni-red)]">View newsletter</a>
+                                @endif
+                            </div>
+                        @else
+                            <span class="text-xs text-gray-400">Content deleted</span>
+                        @endif
                         <div class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</div>
                     </td>
                     <td class="px-4 py-3">

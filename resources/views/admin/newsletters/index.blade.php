@@ -18,11 +18,20 @@
             <tbody class="divide-y divide-gray-100">
                 @forelse($newsletters as $nl)
                 <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 font-semibold" style="color: var(--muni-red-dark);">{{ $nl->title }}<div class="text-xs text-gray-500">{{ $nl->slug }}</div></td>
+                    <td class="px-4 py-3">
+                        <span class="font-semibold" style="color: var(--muni-red-dark);">{{ $nl->title }}</span>
+                        @if($nl->is_published)
+                            <span class="ms-2 text-[10px] uppercase px-2 py-0.5 rounded-full" style="background:#dcfce7; color:#15803d;">Published</span>
+                        @else
+                            <span class="ms-2 text-[10px] uppercase px-2 py-0.5 rounded-full" style="background:#fef3c7; color:#b45309;">Draft</span>
+                        @endif
+                        <div class="text-xs text-gray-500">{{ $nl->slug }}</div>
+                    </td>
                     <td class="px-4 py-3">{{ $nl->publication_year }}</td>
                     <td class="px-4 py-3">{{ $nl->download_count }}</td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ asset('storage/'.$nl->file_path) }}" target="_blank" class="text-xs px-2 py-1 rounded-sm border">View PDF</a>
+                        @if($nl->file_path)<a href="{{ asset('storage/'.$nl->file_path) }}" target="_blank" class="text-xs px-2 py-1 rounded-sm border">View PDF</a>@endif
+                        <a href="{{ route('newsletters.show', $nl->slug) }}" target="_blank" class="text-xs px-2 py-1 rounded-sm border ms-1">View</a>
                         <a href="{{ route('admin.newsletters.edit', $nl) }}" class="text-xs px-2 py-1 rounded-sm ms-1" style="background: var(--muni-blue); color:#fff;">Edit</a>
                         <form method="POST" action="{{ route('admin.newsletters.destroy', $nl) }}" class="inline" onsubmit="return confirm('Delete?')">@csrf @method('DELETE') <button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
                     </td>

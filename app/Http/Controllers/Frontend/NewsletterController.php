@@ -16,10 +16,12 @@ class NewsletterController extends Controller
         $selectedYear = $request->input('year');
 
         $years = Newsletter::selectRaw('DISTINCT publication_year as year')
+            ->published()
             ->orderByDesc('publication_year')
             ->pluck('year');
 
-        $newsletters = Newsletter::when($selectedYear, fn($q) => $q->where('publication_year', $selectedYear))
+        $newsletters = Newsletter::published()
+            ->when($selectedYear, fn($q) => $q->where('publication_year', $selectedYear))
             ->orderByDesc('publication_year')
             ->latest()
             ->paginate(10)
@@ -33,6 +35,28 @@ class NewsletterController extends Controller
             ->get();
 
         return view('frontend.newsletters.index', compact('newsletters', 'years', 'selectedYear', 'articles'));
+    }
+
+    public function show(string $slug): View
+    {
+        $newsletter = Newsletter::with(['comments', 'likes'])
+            ->published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $meta_title = $newsletter->title;
+        $meta_description = \Illuminate\Support\Str::limit(strip_tags($newsletter->description ?: ''), 160);
+        $og_image = $newsletter->image()
+            ? asset('storage/' . $newsletter->image())
+            : asset('assets/images/muni-logo.png');
+
+        $related = Newsletter::published()
+            ->where('id', '!=', $newsletter->id)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('frontend.newsletters.show', compact('newsletter', 'related', 'meta_title', 'meta_description', 'og_image'));
     }
 
     public function download(Newsletter $newsletter): BinaryFileResponse

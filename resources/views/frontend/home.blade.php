@@ -88,6 +88,41 @@
         </div>
     </section>
 
+    <!-- Latest Newsletters -->
+    @if($latestNewsletters->count())
+    <section class="mb-10">
+        <div class="flex items-center justify-between mb-4 border-b-2 pb-2" style="border-color: var(--muni-gold);">
+            <h2 class="text-xl font-bold" style="font-family:var(--font-heading); color: var(--muni-red-dark);"><i class="fa-solid fa-file-pdf me-2" style="color: var(--muni-red);"></i> Latest Newsletters</h2>
+            <a href="{{ route('newsletters.index') }}" class="text-sm font-semibold hover:text-[var(--muni-red)]">All newsletters <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            @foreach($latestNewsletters as $nl)
+            <article class="card-muni">
+                <a href="{{ route('newsletters.show', $nl->slug) }}">
+                    @if($nl->image())
+                        <img loading="lazy" src="{{ asset('storage/' . $nl->image()) }}" alt="{{ $nl->title }}" class="w-full" style="aspect-ratio:16/9; object-fit:cover;">
+                    @else
+                        <div class="w-full flex items-center justify-center" style="aspect-ratio:16/9; background: var(--color-bg-tertiary);"><i class="fa-solid fa-file-pdf text-3xl" style="color: var(--muni-red);"></i></div>
+                    @endif
+                </a>
+                <div class="p-4 flex-1 flex flex-col">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="badge-muni text-xs" style="background: var(--muni-gold); color: var(--muni-red-dark);">Newsletter</span>
+                        <span class="text-xs text-gray-500">{{ $nl->publication_year }}</span>
+                    </div>
+                    <h3 class="card-title text-base flex-1"><a href="{{ route('newsletters.show', $nl->slug) }}" class="hover:text-[var(--muni-red)]">{{ $nl->title }}</a></h3>
+                    <p class="card-excerpt mt-2">{{ $nl->description }}</p>
+                    <div class="mt-3 text-xs text-gray-500">
+                        <i class="fa-solid fa-download me-1"></i>{{ $nl->download_count }} downloads
+                        @if($nl->file_path) • <a href="{{ route('newsletters.download', $nl) }}" target="_blank" class="font-bold hover:text-[var(--muni-red)]"><i class="fa-solid fa-file-pdf me-1"></i>PDF</a>@endif
+                    </div>
+                </div>
+            </article>
+            @endforeach
+        </div>
+    </section>
+    @endif
+
     <!-- Category Highlights - Horizontal scrolling -->
     @foreach($categories as $cat)
         @if($cat->articles->count())

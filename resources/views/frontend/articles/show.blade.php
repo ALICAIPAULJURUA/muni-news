@@ -51,14 +51,13 @@
                 <!-- Social Sharing -->
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <h3 class="text-sm font-bold uppercase tracking-wider mb-3" style="color: var(--muni-red-dark);">Share this article</h3>
-                    @php $shareUrl = urlencode(url()->current()); $shareTitle = urlencode($article->title); @endphp
-                    <div class="flex flex-wrap gap-2">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank" class="w-10 h-10 rounded-sm flex items-center justify-center text-white hover:opacity-90" style="background:#1877F2; min-width:44px;min-height:44px;" aria-label="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}" target="_blank" class="w-10 h-10 rounded-sm flex items-center justify-center text-white hover:opacity-90" style="background:#000; min-width:44px;"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}" target="_blank" class="w-10 h-10 rounded-sm flex items-center justify-center text-white hover:opacity-90" style="background:#0A66C2; min-width:44px;"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://wa.me/?text={{ $shareTitle }}%20{{ $shareUrl }}" target="_blank" class="w-10 h-10 rounded-sm flex items-center justify-center text-white hover:opacity-90" style="background:#25D366; min-width:44px;"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="mailto:?subject={{ $shareTitle }}&body={{ $shareUrl }}" class="w-10 h-10 rounded-sm flex items-center justify-center text-white hover:opacity-90" style="background: var(--muni-red); min-width:44px;"><i class="fa-solid fa-envelope"></i></a>
-                    </div>
+                    @php $shareUrl = url()->current(); $shareTitle = $article->title; @endphp
+                    @include('frontend.partials.share-buttons')
+                </div>
+
+                <!-- Likes -->
+                <div class="mt-6">
+                    @include('frontend.partials.like-button', ['likable' => $article])
                 </div>
 
                 <!-- Comments Section -->
@@ -104,7 +103,8 @@
                         <h4 class="font-bold mb-3" style="color: var(--muni-red-dark);">Leave a Comment</h4>
                         <form method="POST" action="{{ route('comments.store') }}" class="space-y-4">
                             @csrf
-                            <input type="hidden" name="article_id" value="{{ $article->id }}">
+                            <input type="hidden" name="commentable_type" value="{{ get_class($article) }}">
+                            <input type="hidden" name="commentable_id" value="{{ $article->id }}">
                             <input type="hidden" name="parent_id" id="parent_id" value="">
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>

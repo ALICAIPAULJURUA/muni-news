@@ -19,6 +19,8 @@ Route::get('/news', [ArticleController::class, 'index'])->name('news.index');
 Route::get('/article/{slug}', [ArticleController::class, 'show'])->middleware('track.views')->name('article.show');
 Route::get('/category/{slug}', [ArticleController::class, 'category'])->name('category.show');
 Route::get('/newsletters', [NewsletterController::class, 'index'])->name('newsletters.index');
+Route::get('/newsletters/{slug}', [NewsletterController::class, 'show'])->name('newsletters.show');
+Route::get('/newsletters/{newsletter}/download', [NewsletterController::class, 'download'])->name('newsletters.download');
 Route::get('/events', [App\Http\Controllers\Frontend\EventController::class, 'index'])->name('events.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
 Route::get('/media-gallery', [MediaController::class, 'index'])->name('gallery.index');
@@ -26,6 +28,8 @@ Route::get('/downloads', [DownloadController::class, 'index'])->name('downloads.
 Route::get('/downloads/{download}/file', [DownloadController::class, 'download'])->name('downloads.download');
 Route::post('/subscribe', [SubscribeController::class, 'store'])->middleware('throttle:3,1')->name('subscribe');
 Route::post('/comments', [FrontendCommentController::class, 'store'])->name('comments.store');
+Route::post('/like', [\App\Http\Controllers\Frontend\LikeController::class, 'store'])->middleware('auth')->name('like.store');
+Route::delete('/like/{like}', [\App\Http\Controllers\Frontend\LikeController::class, 'destroy'])->middleware('auth')->name('like.destroy');
 // Static pages: about, contact, etc.
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/about', fn() => app(PageController::class)->show('about'))->name('about');
