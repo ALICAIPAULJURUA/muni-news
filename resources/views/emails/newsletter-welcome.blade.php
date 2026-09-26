@@ -13,7 +13,7 @@
                     <!-- Header with Logo -->
                     <tr>
                         <td align="center" style="background-color:#ffffff; padding: 30px 30px 20px; border-bottom: 3px solid #8B0000;">
-                            <img src="{{ asset('assets/images/muni-logo.png') }}" alt="Muni University Logo" width="150" style="max-width: 150px; height: auto; display: block; margin: 0 auto;">
+                            <img src="https://news.muni.ac.ug/assets/images/muni-logo.png" alt="Muni University" width="150" height="auto" style="max-width: 150px; height: auto; display: block; margin: 0 auto; border: 0;">
                             <h1 style="margin:0; font-family:'Merriweather', Georgia, serif; font-size:22px; font-weight:800; color:#8B0000; line-height:1.2;">Muni University</h1>
                             <p style="margin:5px 0 0; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#5C0000; font-weight:700;">Transforming Lives</p>
                             <p style="margin:5px 0 0; font-size:12px; color:#24AAE1; font-weight:600;">news.muni.ac.ug</p>
