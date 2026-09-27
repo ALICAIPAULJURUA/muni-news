@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Article;
 use App\Models\Newsletter;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -27,14 +26,7 @@ class NewsletterController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        // For 2-column layout: articles left, newsletters right
-        $articles = Article::with(['category'])
-            ->where('is_published', true)
-            ->latest('published_at')
-            ->take(6)
-            ->get();
-
-        return view('frontend.newsletters.index', compact('newsletters', 'years', 'selectedYear', 'articles'));
+        return view('frontend.newsletters.index', compact('newsletters', 'years', 'selectedYear'));
     }
 
     public function show(string $slug): View

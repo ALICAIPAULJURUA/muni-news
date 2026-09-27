@@ -10,52 +10,38 @@
 </div>
 @endif
 
-<form method="POST" action="{{ route('admin.newsletters.store') }}" enctype="multipart/form-data" class="space-y-6">
+<form method="POST" action="{{ route('admin.newsletters.store') }}" enctype="multipart/form-data">
 @csrf
-<div class="grid lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2 space-y-4">
-        <div class="bg-white rounded-sm shadow-sm p-6 border">
-            <label class="block text-sm font-bold mb-1">Title *</label>
-            <input type="text" name="title" value="{{ old('title') }}" required class="w-full border-2 rounded-sm px-3 py-2" style="min-height:44px;" placeholder="Newsletter title">
-            <label class="block text-sm font-bold mt-4 mb-1">Slug (auto)</label>
-            <input type="text" name="slug" value="{{ old('slug') }}" class="w-full border-2 rounded-sm px-3 py-2 text-sm" placeholder="auto-generated">
-            <label class="block text-sm font-bold mt-4 mb-1">Summary / Description</label>
-            <textarea name="description" rows="3" class="w-full border-2 rounded-sm px-3 py-2">{{ old('description') }}</textarea>
-            <label class="block text-sm font-bold mt-4 mb-1">Content (TinyMCE)</label>
-            <textarea id="content" name="content" rows="14" class="w-full border-2 rounded-sm px-3 py-2">{{ old('content') }}</textarea>
-        </div>
+<div class="max-w-3xl bg-white rounded-sm shadow-sm p-6 border space-y-5">
+    <div>
+        <label class="block text-sm font-bold mb-1">Title *</label>
+        <input type="text" name="title" value="{{ old('title') }}" required class="w-full border-2 rounded-sm px-3 py-2" style="min-height:44px;" placeholder="Newsletter title">
+        @error('title')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
     </div>
 
-    <div class="space-y-4">
-        <div class="bg-white rounded-sm shadow-sm p-6 border">
-            <h3 class="font-bold mb-3" style="color: var(--muni-red-dark);">Details</h3>
-            <label class="block text-sm font-bold mb-1">Publication Year *</label>
-            <input type="number" name="publication_year" value="{{ old('publication_year', date('Y')) }}" required class="w-full border-2 rounded-sm px-3 py-2">
-            <div class="mt-3">
-                <label class="flex items-center gap-2"><input type="checkbox" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }} class="rounded"><span class="text-sm">Published (visible to public)</span></label>
-            </div>
-        </div>
+    <div>
+        <label class="block text-sm font-bold mb-1">Featured Image</label>
+        <input type="file" name="featured_image" accept="image/*" class="w-full text-sm">
+        <p class="text-xs text-gray-500 mt-2">Recommended size: 1200 x 630 pixels. Max 5MB.</p>
+        @error('featured_image')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+    </div>
 
-        <div class="bg-white rounded-sm shadow-sm p-6 border">
-            <h3 class="font-bold mb-3" style="color: var(--muni-red-dark);">Featured Image</h3>
-            <input type="file" name="featured_image" accept="image/*" class="w-full text-sm">
-            <p class="text-xs text-gray-500 mt-2">Max 5MB. Shown at the top of the newsletter page.</p>
-        </div>
+    <div>
+        <label class="block text-sm font-bold mb-1">Content</label>
+        <textarea id="content" name="content" rows="14" class="w-full border-2 rounded-sm px-3 py-2">{{ old('content') }}</textarea>
+        @error('content')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+    </div>
 
-        <div class="bg-white rounded-sm shadow-sm p-6 border">
-            <h3 class="font-bold mb-3" style="color: var(--muni-red-dark);">Cover Image (archive)</h3>
-            <input type="file" name="cover_image" accept="image/*" class="w-full text-sm">
-            <p class="text-xs text-gray-500 mt-2">Max 5MB. Used in the newsletter archive thumbnail.</p>
-        </div>
+    <div>
+        <label class="flex items-center gap-2">
+            <input type="checkbox" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }} class="rounded">
+            <span class="text-sm font-bold">Publish (visible to the public)</span>
+        </label>
+    </div>
 
-        <div class="bg-white rounded-sm shadow-sm p-6 border">
-            <h3 class="font-bold mb-3" style="color: var(--muni-red-dark);">PDF Attachment (optional)</h3>
-            <input type="file" name="file" accept="application/pdf" class="w-full text-sm">
-            <p class="text-xs text-gray-500 mt-2">Max 10MB, PDF only. Add a downloadable PDF version of this newsletter.</p>
-        </div>
-
-        <button type="submit" class="btn-muni w-full">Create Newsletter</button>
-        <a href="{{ route('admin.newsletters.index') }}" class="block text-center text-sm underline">Cancel</a>
+    <div class="flex gap-3 pt-2 border-t border-gray-100">
+        <button type="submit" class="btn-muni">Create Newsletter</button>
+        <a href="{{ route('admin.newsletters.index') }}" class="btn btn-outline">Cancel</a>
     </div>
 </div>
 </form>

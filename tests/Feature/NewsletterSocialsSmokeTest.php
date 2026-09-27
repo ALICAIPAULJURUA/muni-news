@@ -119,4 +119,45 @@ class NewsletterSocialsSmokeTest extends TestCase
         $this->assertEquals(1, $nl->comments()->count());
         $this->assertEquals('Great read!', $nl->comments()->first()->content);
     }
+
+    public function test_news_and_newsletters_are_strictly_isolated(): void
+    {
+        $user = User::factory()->create();
+        $cat = Category::create(['name' => 'News', 'slug' => 'news']);
+
+        $article = Article::create([
+            'author_id' => $user->id,
+            'category_id' => $cat->id,
+            'title' => 'Exclusive Campus News Story',
+            'slug' => 'exclusive-campus-news-story',
+            'summary' => 'A news story only.',
+            'content' => '<p>News body</p>',
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $newsletter = $this->makeNewsletter([
+            'title' => 'Quarterly Research Digest',
+            'author_id' => $user->id,
+        ]);
+
+        // Homepage: both the article (news) and the "Latest Newsletters" section appear
+        $home = $this->get(route('home'));
+        $home->assertOk();
+        $home->assertSee('Exclusive Campus News Story');
+        $home->assertSee('Latest Newsletters');
+        $home->assertSee('Quarterly Research Digest');
+
+        // /news: article appears, newsletter does NOT
+        $news = $this->get(route('news.index'));
+        $news->assertOk();
+        $news->assertSee('Exclusive Campus News Story');
+        $news->assertDontSee('Quarterly Research Digest');
+
+        // /newsletters: newsletter appears, article does NOT
+        $newsletters = $this->get(route('newsletters.index'));
+        $newsletters->assertOk();
+        $newsletters->assertSee('Quarterly Research Digest');
+        $newsletters->assertDontSee('Exclusive Campus News Story');
+    }
 }
