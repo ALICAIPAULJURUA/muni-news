@@ -160,4 +160,36 @@ class NewsletterSocialsSmokeTest extends TestCase
         $newsletters->assertSee('Quarterly Research Digest');
         $newsletters->assertDontSee('Exclusive Campus News Story');
     }
+
+    public function test_style_and_script_tags_are_preserved_from_admin_newsletter_to_frontend(): void
+    {
+        foreach (['super_admin', 'comm_admin', 'editor', 'viewer'] as $role) {
+            \Spatie\Permission\Models\Role::firstOrCreate(['name' => $role]);
+        }
+        $user = User::factory()->create();
+        $user->assignRole('super_admin');
+
+        $html = "<style>\n"
+            . '.test-box { background: 8B0000; color: white; padding: 20px; border-radius: 8px; }' . "\n"
+            . '</style>' . "\n"
+            . '<script>document.body.dataset.spy = "ok";</script>' . "\n"
+            . '<div class="test-box"><h2>Test Newsletter</h2><p>Styled content</p></div>';
+
+        $resp = $this->actingAs($user)->post(route('admin.newsletters.store'), [
+            'title' => 'Styled Newsletter',
+            'content' => $html,
+            'is_published' => '1',
+        ]);
+        $resp->assertRedirect(route('admin.newsletters.index'));
+
+        $newsletter = Newsletter::where('slug', 'styled-newsletter')->first();
+        $this->assertNotNull($newsletter);
+        $this->assertStringContainsString('<style>', $newsletter->content);
+        $this->assertStringContainsString('<script>', $newsletter->content);
+
+        $show = $this->get(route('newsletters.show', $newsletter->slug));
+        $show->assertOk();
+        $show->assertSee($html, false);
+        $show->assertSee('.test-box', false);
+    }
 }

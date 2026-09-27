@@ -3,32 +3,93 @@
 tinymce.init({
     selector: '#content',
     license_key: 'gpl',
-    plugins: ['advlist','autolink','lists','link','image','charmap','preview','anchor','searchreplace','visualblocks','code','fullscreen','insertdatetime','media','table','wordcount','codesample','paste'],
-    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link image media table | removeformat | code',
-    images_upload_url: '{{ route('admin.upload-image') }}',
+    height: 600,
+    menubar: true,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'help', 'wordcount',
+        'codesample', 'pagebreak', 'nonbreaking', 'autoresize', 'paste'
+    ],
+    toolbar: 'undo redo | blocks | ' +
+        'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | ' +
+        'bullist numlist outdent indent | ' +
+        'link image media table | codesample | ' +
+        'removeformat | fullscreen | code | help',
+    toolbar_mode: 'wrap',
+    image_advtab: true,
+    automatic_uploads: true,
+    file_picker_types: 'image',
+    paste_data_images: true,
+
+    // CRITICAL: preserve <style> and <script> tags so premium newsletter
+    // HTML with inline CSS/JS (sticky TOC, scroll-spy, cards) is not stripped
+    valid_elements: '[]',
+    valid_children: '+body[style|script|div|span|article|section|header|footer|nav|main|button|a|link|meta]',
+    extended_valid_elements: 'style[type],script[src|type|defer|async],div[],span[],article[],button[],a[],link[],meta[],figure[],figcaption[],aside[],time[]',
+    verify_html: false,
+
+    // Custom image upload handler (CSRF-protected)
     images_upload_handler: function (blobInfo, progress) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function (resolve, reject) {
             const xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
             xhr.open('POST', '{{ route('admin.upload-image') }}');
-            xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-            xhr.upload.onprogress = (e) => { progress(e.loaded / e.total * 100); };
-            xhr.onload = () => {
-                if (xhr.status === 403) { reject({ message: 'HTTP Error: ' + xhr.status, remove: true }); return; }
-                if (xhr.status < 200 || xhr.status >= 300) { reject('HTTP Error: ' + xhr.status); return; }
-                const json = JSON.parse(xhr.responseText);
-                if (!json || typeof json.location != 'string') { reject('Invalid JSON: ' + xhr.responseText); return; }
-                resolve(json.location);
+
+            xhr.upload.onprogress = function (e) {
+                progress(e.loaded / e.total * 100);
             };
-            xhr.onerror = () => { reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status); };
+
+            xhr.onload = function () {
+                if (xhr.status === 403) {
+                    reject({ message: 'HTTP Error: 403 Forbidden', remove: true });
+                    return;
+                }
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    reject('HTTP Error: ' + xhr.status);
+                    return;
+                }
+                try {
+                    const json = JSON.parse(xhr.responseText);
+                    if (!json || typeof json.location !== 'string') {
+                        reject('Invalid JSON response');
+                        return;
+                    }
+                    resolve(json.location);
+                } catch (e) {
+                    reject('Server did not return valid JSON');
+                }
+            };
+
+            xhr.onerror = function () {
+                reject('Image upload failed due to a network error.');
+            };
+
             const formData = new FormData();
             formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (csrfToken) {
+                formData.append('_token', csrfToken.getAttribute('content'));
+            }
+
             xhr.send(formData);
         });
     },
-    extended_valid_elements: 'style[type],script[src|type|defer],div[],span[],article[*]',
-    verify_html: false,
-    height: 420,
-    content_style: 'body { font-family: Source Sans Pro, sans-serif; line-height:1.8; max-width:75ch; }'
+
+    content_style: 'body { font-family: "Source Sans Pro", sans-serif; font-size: 16px; line-height: 1.8; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }' +
+        'h1 { font-size: 2rem; font-weight: 700; color: #8B0000; }' +
+        'h2 { font-size: 1.5rem; font-weight: 700; color: #8B0000; }' +
+        'h3 { font-size: 1.25rem; font-weight: 700; color: #8B0000; }' +
+        'img { max-width: 100% !important; height: auto !important; }' +
+        'table { width: 100%; border-collapse: collapse; }' +
+        'table td, table th { border: 1px solid #ddd; padding: 8px; }' +
+        'blockquote { border-left: 4px solid #8B0000; padding: 10px 20px; margin: 10px 0; background: #f8f9fa; }',
+
+    setup: function(editor) {
+        editor.on('change', function() {
+            tinymce.triggerSave();
+        });
+    }
 });
 </script>
