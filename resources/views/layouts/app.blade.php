@@ -29,7 +29,7 @@
         h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); }
         .top-bar { background: var(--muni-red-dark); color: #fff; font-size: 0.8rem; }
         .header-main { background: #fff; border-bottom: 3px solid var(--muni-gold); box-shadow: var(--shadow-sm); }
-        .nav-link { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; color: var(--muni-red-dark); position:relative; padding: 0.5rem 0.75rem; border-radius:2px; transition: var(--transition-fast); min-height:44px; display:inline-flex; align-items:center; }
+        .nav-link { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; color: var(--muni-red-dark); position:relative; padding: 0.5rem 0.6rem; border-radius:2px; transition: var(--transition-fast); min-height:44px; display:inline-flex; align-items:center; }
         .nav-link:hover, .nav-link.active { color: var(--muni-red); background: var(--color-bg-secondary); }
         .nav-link.active::after { content:''; position:absolute; bottom:-3px; left:0; right:0; height:3px; background: var(--muni-red); }
         .breaking-ticker { background: var(--muni-red); color:#fff; }
@@ -118,22 +118,13 @@
                     <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
                     <a href="{{ route('news.index') }}" class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}">News</a>
                     <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}"><i class="fa-solid fa-calendar-days me-1 text-xs"></i> Events</a>
-                    @php $navCats = \App\Models\Category::whereNotIn('slug',['news','events','research','student-stories','staff-stories'])->orderBy('sort_order')->take(4)->get(); @endphp
-                    @foreach($navCats as $cat)
+                    <a href="{{ route('newsletters.index') }}" class="nav-link {{ request()->routeIs('newsletters.*') ? 'active' : '' }}"><i class="fa-solid fa-file-pdf me-1 text-xs"></i> Newsletters</a>
+                    @php $navCategories = \App\Models\Category::whereNotIn('slug',['news','events','research','student-stories','staff-stories'])->orderBy('sort_order')->get(); @endphp
+                    @foreach($navCategories as $cat)
                         <a href="{{ route('category.show', $cat->slug) }}" class="nav-link {{ request()->is('category/'.$cat->slug) ? 'active' : '' }}">{{ $cat->name }}</a>
                     @endforeach
-                    <div class="relative" x-data="{ open:false }">
-                        <button @click="open=!open" class="nav-link" aria-expanded="false" aria-haspopup="true">More <i class="fa-solid fa-chevron-down ms-1 text-xs"></i></button>
-                        <div x-show="open" @click.away="open=false" x-transition class="absolute left-0 mt-2 w-48 bg-white rounded-sm shadow-lg border border-gray-200 py-2 z-50" style="border-top:3px solid var(--muni-gold);">
-                            @foreach(\App\Models\Category::whereNotIn('slug',['news','events','research','student-stories','staff-stories'])->orderBy('sort_order')->skip(4)->take(10)->get() as $cat)
-                                <a href="{{ route('category.show', $cat->slug) }}" class="block px-4 py-2 text-sm hover:bg-gray-50">{{ $cat->name }}</a>
-                            @endforeach
-                            <div class="border-t my-1"></div>
-                            <a href="{{ route('newsletters.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-file-pdf me-2"></i>Newsletters</a>
-                            <a href="{{ route('downloads.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-download me-2"></i>Downloads</a>
-                            <a href="{{ route('gallery.index') }}" class="block px-4 py-2 text-sm hover:bg-gray-50"><i class="fa-solid fa-images me-2"></i>Gallery</a>
-                        </div>
-                    </div>
+                    <a href="{{ route('downloads.index') }}" class="nav-link {{ request()->routeIs('downloads.*') ? 'active' : '' }}"><i class="fa-solid fa-download me-1 text-xs"></i> Downloads</a>
+                    <a href="{{ route('gallery.index') }}" class="nav-link {{ request()->routeIs('gallery.*') ? 'active' : '' }}"><i class="fa-solid fa-images me-1 text-xs"></i> Gallery</a>
                 </nav>
 
                 <!-- Actions -->
@@ -159,12 +150,12 @@
             <div x-show="mobileMenu" x-transition class="lg:hidden border-t border-gray-200 py-4">
                 <nav class="flex flex-col gap-1">
                     <a href="{{ url('/') }}" class="px-3 py-2 rounded-sm font-semibold hover:bg-gray-50 {{ request()->is('/') ? 'bg-gray-100' : '' }}">Home</a>
-                    <a href="{{ route('news.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">News</a>
-                    @foreach(\App\Models\Category::whereNotIn('slug',['news','events','research','student-stories','staff-stories'])->orderBy('sort_order')->get() as $cat)
-                        <a href="{{ route('category.show', $cat->slug) }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">• {{ $cat->name }}</a>
-                    @endforeach
+                    <a href="{{ route('news.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50 {{ request()->routeIs('news.*') ? 'bg-gray-100' : '' }}">News</a>
                     <a href="{{ route('events.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">Events</a>
                     <a href="{{ route('newsletters.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">Newsletters</a>
+                    @foreach($navCategories as $cat)
+                        <a href="{{ route('category.show', $cat->slug) }}" class="px-3 py-2 rounded-sm hover:bg-gray-50 {{ request()->is('category/'.$cat->slug) ? 'bg-gray-100' : '' }}">{{ $cat->name }}</a>
+                    @endforeach
                     <a href="{{ route('downloads.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">Downloads</a>
                     <a href="{{ route('gallery.index') }}" class="px-3 py-2 rounded-sm hover:bg-gray-50">Gallery</a>
                 </nav>
