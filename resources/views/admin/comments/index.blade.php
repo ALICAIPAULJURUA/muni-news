@@ -51,7 +51,7 @@
                         @else
                             <span class="text-xs px-2 py-1 rounded-sm bg-green-600 text-white">Approved</span>
                         @endif
-                        <form method="POST" action="{{ route('admin.comments.destroy', $comment) }}" class="inline" onsubmit="return confirm('Delete?')">@csrf @method('DELETE')<button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white ms-1">Delete</button></form>
+                        <form method="POST" action="{{ route('admin.comments.destroy', $comment) }}" class="inline" data-secure-delete>@csrf @method('DELETE')<button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm bg-red-600 text-white ms-1">Delete</button></form>
                     </td>
                 </tr>
                 @empty

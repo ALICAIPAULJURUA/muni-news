@@ -24,7 +24,7 @@
                     <td class="px-4 py-3 text-xs">{{ $event->location }}</td>
                     <td class="px-4 py-3 text-right">
                         <a href="{{ route('admin.events.edit', $event) }}" class="text-xs px-2 py-1 rounded-sm" style="background: var(--muni-blue); color:#fff;">Edit</a>
-                        <form method="POST" action="{{ route('admin.events.destroy', $event) }}" class="inline" onsubmit="return confirm('Delete?')">@csrf @method('DELETE') <button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
+                        <form method="POST" action="{{ route('admin.events.destroy', $event) }}" class="inline" data-secure-delete>@csrf @method('DELETE') <button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
                     </td>
                 </tr>
                 @empty

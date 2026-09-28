@@ -52,7 +52,7 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <a href="{{ route('admin.patterns.edit', $pattern) }}" class="text-xs px-2 py-1 rounded-sm" style="background: var(--muni-blue); color:#fff;">Edit</a>
-                        <form method="POST" action="{{ route('admin.patterns.destroy', $pattern) }}" class="inline" onsubmit="return confirm('Delete this section pattern?')">@csrf @method('DELETE') <button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white ms-1">Delete</button></form>
+                        <form method="POST" action="{{ route('admin.patterns.destroy', $pattern) }}" class="inline" data-secure-delete>@csrf @method('DELETE') <button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm bg-red-600 text-white ms-1">Delete</button></form>
                     </td>
                 </tr>
                 @empty

@@ -45,7 +45,7 @@
                     <td class="px-4 py-3 text-right">
                         <a href="{{ route('admin.users.edit', $user) }}" class="text-xs px-2 py-1 rounded-sm" style="background: var(--muni-blue); color:#fff;">Edit</a>
                         <form method="POST" action="{{ route('admin.users.toggle-active', $user) }}" class="inline">@csrf <button class="text-xs px-2 py-1 rounded-sm border ms-1">{{ $user->is_active ? 'Deactivate' : 'Activate' }}</button></form>
-                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline" onsubmit="return confirm('Delete?')">@csrf @method('DELETE') <button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white ms-1">Delete</button></form>
+                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline" data-secure-delete>@csrf @method('DELETE') <button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm bg-red-600 text-white ms-1">Delete</button></form>
                     </td>
                 </tr>
                 @empty

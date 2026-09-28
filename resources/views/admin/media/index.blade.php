@@ -15,12 +15,12 @@
     <p class="text-xs text-gray-500 mt-2">Whitelist MIME validated, sanitized via Str::slug, stored to storage/app/public/media/</p>
 </div>
 
-<form method="POST" action="{{ route('admin.media.bulk-destroy') }}" id="bulkForm">
+<form method="POST" action="{{ route('admin.media.bulk-destroy') }}" id="bulkForm" data-secure-delete>
 @csrf
 <div class="bg-white rounded-sm shadow-sm border overflow-hidden">
     <div class="p-4 border-b flex justify-between items-center">
         <h3 class="font-bold" style="color: var(--muni-red-dark);">All Media</h3>
-        <button type="submit" class="text-xs px-3 py-2 rounded-sm bg-red-600 text-white" onclick="return confirm('Delete selected?')">Bulk Delete</button>
+        <button type="submit" class="btn-secure-delete text-xs px-3 py-2 rounded-sm bg-red-600 text-white">Bulk Delete</button>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4">
         @forelse($media as $item)
@@ -36,7 +36,7 @@
             <div class="p-2">
                 <p class="text-xs font-semibold truncate" title="{{ $item->original_name }}">{{ $item->original_name }}</p>
                 <p class="text-xs text-gray-500">{{ number_format($item->size/1024,1) }} KB • {{ $item->uploader->username ?? 'system' }}</p>
-                <form method="POST" action="{{ route('admin.media.destroy', $item) }}" class="mt-1" onsubmit="return confirm('Delete?')">@csrf @method('DELETE')<button class="text-xs text-red-600 underline">Delete</button></form>
+                <form method="POST" action="{{ route('admin.media.destroy', $item) }}" class="mt-1" data-secure-delete>@csrf @method('DELETE')<button type="submit" class="btn-secure-delete text-xs text-red-600 underline">Delete</button></form>
             </div>
         </div>
         @empty

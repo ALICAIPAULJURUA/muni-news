@@ -27,9 +27,67 @@
         .form-control, .form-select, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="datetime-local"], textarea, select { padding: 0.75rem 1rem !important; border: 1px solid #e2e8f0 !important; transition: all 150ms ease-in-out; border-radius:2px !important; }
         .form-control:focus, .form-select:focus, input:focus, textarea:focus, select:focus { border-color: var(--muni-blue) !important; box-shadow: 0 0 0 3px rgba(36,170,225,0.15) !important; outline: none !important; }
         .sidebar-scroll::-webkit-scrollbar{width:6px;} .sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2); border-radius:3px;}
+
+        /* =========================================
+           SECURE DELETE MODAL & BRANDED TOASTS
+           ========================================= */
+        .sdm { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; visibility:hidden; opacity:0; transition:opacity .2s ease; }
+        .sdm.sdm-open { visibility:visible; opacity:1; }
+        .sdm-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.45); }
+        .sdm-dialog { position:relative; width:100%; max-width:480px; margin:0 16px; background:#fff; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.15); transform:translateY(12px) scale(0.98); transition:transform .2s ease; }
+        .sdm.sdm-open .sdm-dialog { transform:translateY(0) scale(1); }
+        .sdm-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; background:#fff3cd; border-bottom:2px solid #ffde00; border-radius:8px 8px 0 0; }
+        .sdm-title { margin:0; color:#856404; font-weight:700; font-size:1rem; }
+        .sdm-close { background:none; border:none; font-size:1.1rem; color:#856404; cursor:pointer; padding:4px 8px; border-radius:4px; }
+        .sdm-close:hover { background:rgba(0,0,0,0.06); }
+        .sdm-body { padding:1.25rem; }
+        .sdm-desc { color:#4a5568; margin:0 0 0.75rem; }
+        .sdm-prompt { margin:0 0 0.75rem; font-weight:700; color:var(--muni-red); }
+        .sdm-chip { background:#f8f9fa; padding:2px 8px; border-radius:4px; border:1px solid #e2e8f0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+        .sdm-input { width:100%; border:2px solid #e2e8f0; border-radius:4px; padding:0.6rem 0.85rem; font-weight:600; font-size:0.95rem; }
+        .sdm-input:focus { outline:none; border-color:var(--muni-blue); box-shadow:0 0 0 3px rgba(36,170,225,0.15); }
+        .sdm-warn { margin-top:0.5rem; font-size:0.8125rem; color:#dc2626; }
+        .sdm-footer { display:flex; justify-content:flex-end; gap:0.5rem; padding:0.9rem 1.25rem; background:#f8f9fa; border-top:1px solid #e9ecef; border-radius:0 0 8px 8px; }
+        .sdm-btn { padding:0.5rem 1.1rem; border-radius:4px; border:none; font-weight:600; cursor:pointer; font-size:0.9rem; }
+        .sdm-btn-cancel { background:#6c757d; color:#fff; }
+        .sdm-btn-cancel:hover { background:#5a6268; }
+        .sdm-btn-danger { background:var(--muni-red); color:#fff; }
+        .sdm-btn-danger:hover { background:var(--muni-red-dark); }
+        .sdm-btn-danger:disabled { opacity:0.5; pointer-events:none; }
+
+        .toast-container { position:fixed; top:80px; right:16px; display:flex; flex-direction:column; gap:10px; max-width:calc(100vw - 32px); }
+        .custom-toast { border:none; border-radius:8px; box-shadow:0 10px 25px rgba(0,0,0,0.15); min-width:300px; overflow:hidden; animation:slideInRight .4s ease-out; }
+        .custom-toast.custom-toast-hide { opacity:0; transform:translateX(100%); transition:opacity .4s ease, transform .4s ease; }
+        .toast-header { display:flex; align-items:center; gap:8px; padding:0.7rem 1rem; color:#fff; font-weight:700; }
+        .toast-header.success { background: #198754; }
+        .toast-header.error { background: #dc2626; }
+        .toast-header.warning { background: #d97706; }
+        .toast-close { background:none; border:none; color:#fff; cursor:pointer; margin-left:auto; padding:2px 6px; font-size:0.9rem; opacity:0.8; }
+        .toast-close:hover { opacity:1; }
+        .toast-body { padding:0.85rem 1rem; font-weight:600; font-size:0.9rem; }
+        .custom-toast-success .toast-body { color:#155724; background:#d4edda; }
+        .custom-toast-error .toast-body { color:#721c24; background:#f8d7da; }
+        .custom-toast-warning .toast-body { color:#856404; background:#fff3cd; }
+        @keyframes slideInRight { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+        @media (max-width:480px) { .custom-toast { min-width:0; width:100%; } }
     </style>
 </head>
 <body class="bg-gray-100 antialiased" x-data="{ open: false }">
+    <!-- Custom Toast Container -->
+    <div class="toast-container" id="toastContainer" style="z-index:9999;">
+        @if(session('success'))
+        <div class="custom-toast custom-toast-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header success"><i class="fas fa-check-circle"></i><strong class="me-auto">Success</strong><button type="button" class="toast-close" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+            <div class="toast-body">{{ session('success') }}</div>
+        </div>
+        @endif
+        @if(session('error'))
+        <div class="custom-toast custom-toast-error" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header error"><i class="fas fa-exclamation-circle"></i><strong class="me-auto">Error</strong><button type="button" class="toast-close" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+            <div class="toast-body">{{ session('error') }}</div>
+        </div>
+        @endif
+    </div>
     <div class="flex min-h-screen">
         <aside class="hidden lg:flex lg:flex-shrink-0 w-64 sidebar-bg text-white flex-col fixed inset-y-0 z-30">
             <div class="flex items-center gap-3 px-6 py-5 border-b border-white/10" style="border-bottom:2px solid var(--muni-gold);">
@@ -126,8 +184,6 @@
                 </div>
             </header>
             <main class="flex-1 p-4 lg:p-6">
-                @if(session('success'))<div class="mb-4 bg-green-50 border-l-4 p-4 rounded-sm flex items-center gap-2" style="border-color: var(--muni-emerald, #00b9f1);"><i class="fa-solid fa-circle-check" style="color: var(--muni-blue);"></i><span class="text-sm font-medium text-green-800">{{ session('success') }}</span></div>@endif
-                @if(session('error'))<div class="mb-4 bg-red-50 border-l-4 p-4 rounded-sm flex items-center gap-2" style="border-color: var(--muni-red);"><i class="fa-solid fa-circle-exclamation" style="color: var(--muni-red);"></i><span class="text-sm font-medium text-red-800">{{ session('error') }}</span></div>@endif
                 @if($errors->any() && !isset($noErrorDisplay))<div class="mb-4 bg-red-50 border-l-4 p-4 rounded-sm" style="border-color: var(--muni-red);"><ul class="text-sm text-red-800 list-disc ms-4">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul></div>@endif
                 {{ $slot ?? '' }} @yield('content')
             </main>
@@ -158,6 +214,130 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
+    </script>
+
+    <!-- Secure Delete Confirmation Modal -->
+    <div id="secureDeleteModal" class="sdm" aria-hidden="true">
+        <div class="sdm-backdrop" data-sdm-close></div>
+        <div class="sdm-dialog" role="dialog" aria-modal="true" aria-labelledby="sdmTitle">
+            <div class="sdm-header">
+                <h5 class="sdm-title" id="sdmTitle"><i class="fas fa-exclamation-triangle me-2"></i> Confirm Permanent Deletion</h5>
+                <button type="button" class="sdm-close" data-sdm-close aria-label="Close"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="sdm-body">
+                <p class="sdm-desc">You are about to permanently delete this item. This action cannot be undone and will remove all associated data.</p>
+                <p class="sdm-prompt">To confirm, please type <span class="sdm-chip">DELETE</span> in the box below:</p>
+                <input type="text" id="deleteConfirmationInput" class="sdm-input" placeholder="Type DELETE here..." autocomplete="off">
+                <div id="deleteWarningText" class="sdm-warn" style="display:none;"><i class="fas fa-times-circle me-1"></i> You must type exactly "DELETE" to proceed.</div>
+            </div>
+            <div class="sdm-footer">
+                <button type="button" class="sdm-btn sdm-btn-cancel" data-sdm-close>Cancel</button>
+                <button type="button" id="confirmDeleteBtn" class="sdm-btn sdm-btn-danger" disabled><i class="fas fa-trash-alt me-1"></i> Permanently Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        function hideToast(t) {
+            if (!t || t.dataset.hiding) return;
+            t.dataset.hiding = '1';
+            t.classList.add('custom-toast-hide');
+            setTimeout(function () { t.remove(); }, 400);
+        }
+
+        // Auto-dismiss session toasts (success 5s, warning 7s, error 8s).
+        document.querySelectorAll('.custom-toast').forEach(function (t) {
+            var delay = t.classList.contains('custom-toast-error') ? 8000
+                : t.classList.contains('custom-toast-warning') ? 7000 : 5000;
+            setTimeout(function () { hideToast(t); }, delay);
+        });
+        document.addEventListener('click', function (e) {
+            var c = e.target.closest('.toast-close');
+            if (c) hideToast(c.closest('.custom-toast'));
+        });
+
+        // Secure DELETE modal (vanilla JS, no Bootstrap dependency).
+        var modal = document.getElementById('secureDeleteModal');
+        if (modal) {
+            var input = document.getElementById('deleteConfirmationInput');
+            var confirmBtn = document.getElementById('confirmDeleteBtn');
+            var warn = document.getElementById('deleteWarningText');
+            var pendingForm = null;
+
+            function setState(enabled) {
+                confirmBtn.disabled = !enabled;
+                if (input.value.trim() === '' || enabled) {
+                    warn.style.display = 'none';
+                } else {
+                    warn.style.display = 'block';
+                }
+            }
+
+            function close() {
+                modal.classList.remove('sdm-open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                input.value = '';
+                setState(false);
+                pendingForm = null;
+            }
+
+            function open(form) {
+                pendingForm = form;
+                input.value = '';
+                setState(false);
+                modal.classList.add('sdm-open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                setTimeout(function () { input.focus(); }, 250);
+            }
+
+            input.addEventListener('input', function () { setState(input.value.trim() === 'DELETE'); });
+
+            confirmBtn.addEventListener('click', function () {
+                if (!pendingForm || input.value.trim() !== 'DELETE') return;
+                var form = pendingForm;
+                close();
+                // Native submit() bypasses the intercepted 'submit' event.
+                form.submit();
+            });
+
+            modal.addEventListener('click', function (e) {
+                if (e.target.closest('[data-sdm-close]') || e.target.classList.contains('sdm-backdrop')) close();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('sdm-open')) close();
+            });
+
+            // Any form marked data-secure-delete opens the modal instead of submitting.
+            document.addEventListener('submit', function (e) {
+                var form = e.target.closest('form[data-secure-delete]');
+                if (!form) return;
+                e.preventDefault();
+                open(form);
+            });
+        }
+
+        // Global branded toast helper (replaces window.alert() in admin UI).
+        window.muniToast = function (message, type) {
+            var container = document.getElementById('toastContainer');
+            if (!container || !message) return;
+            var isError = type === 'error';
+            var isWarning = type === 'warning';
+            var el = document.createElement('div');
+            el.className = 'custom-toast' + (isError ? ' custom-toast-error' : isWarning ? ' custom-toast-warning' : '');
+            var icon = isError ? 'fa-exclamation-circle' : isWarning ? 'fa-exclamation-triangle' : 'fa-check-circle';
+            var label = isError ? 'Error' : isWarning ? 'Notice' : 'Success';
+            var tone = isError ? 'error' : isWarning ? 'warning' : 'success';
+            el.innerHTML = '<div class="toast-header ' + tone + '"><i class="fas ' + icon + '"></i><strong>' + label + '</strong><button type="button" class="toast-close" aria-label="Close"><i class="fas fa-xmark"></i></button></div><div class="toast-body"></div>';
+            el.querySelector('.toast-body').textContent = message;
+            container.appendChild(el);
+            var delay = isError ? 8000 : isWarning ? 7000 : 5000;
+            el.querySelector('.toast-close').addEventListener('click', function () { hideToast(el); });
+            setTimeout(function () { hideToast(el); }, delay);
+        };
+    })();
     </script>
 </body>
 </html>

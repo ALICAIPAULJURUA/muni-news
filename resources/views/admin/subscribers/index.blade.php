@@ -23,7 +23,7 @@
                     <td class="px-4 py-3">@if($sub->is_active)<span class="px-2 py-1 rounded-sm text-xs font-bold bg-green-600 text-white">Active</span> @else <span class="px-2 py-1 rounded-sm text-xs font-bold bg-gray-400 text-white">Inactive</span>@endif</td>
                     <td class="px-4 py-3 text-xs">{{ $sub->subscribed_at?->format('M d, Y H:i') ?? $sub->created_at->format('M d, Y') }}</td>
                     <td class="px-4 py-3 text-right">
-                        <form method="POST" action="{{ route('admin.subscribers.destroy', $sub) }}" class="inline" onsubmit="return confirm('Delete?')">@csrf @method('DELETE')<button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
+                        <form method="POST" action="{{ route('admin.subscribers.destroy', $sub) }}" class="inline" data-secure-delete>@csrf @method('DELETE')<button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
                     </td>
                 </tr>
                 @empty

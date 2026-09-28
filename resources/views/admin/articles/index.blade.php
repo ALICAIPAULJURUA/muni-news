@@ -64,9 +64,9 @@
                     <td class="px-4 py-3 text-right">
                         <a href="{{ route('article.show', $article->slug) }}" target="_blank" class="text-xs px-2 py-1 rounded-sm border hover:bg-gray-50">View</a>
                         <a href="{{ route('admin.articles.edit', $article) }}" class="text-xs px-2 py-1 rounded-sm ms-1" style="background: var(--muni-blue); color:#fff;">Edit</a>
-                        <form method="POST" action="{{ route('admin.articles.destroy', $article) }}" class="inline" onsubmit="return confirm('Delete?')">
+                        <form method="POST" action="{{ route('admin.articles.destroy', $article) }}" class="inline" data-secure-delete>
                             @csrf @method('DELETE')
-                            <button class="text-xs px-2 py-1 rounded-sm ms-1 bg-red-600 text-white">Delete</button>
+                            <button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm ms-1 bg-red-600 text-white">Delete</button>
                         </form>
                     </td>
                 </tr>

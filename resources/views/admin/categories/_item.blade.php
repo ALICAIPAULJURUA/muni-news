@@ -9,9 +9,9 @@
         </div>
         <div class="flex gap-2">
             <button @click="edit=!edit" class="text-xs px-3 py-1 rounded-sm border hover:bg-white" style="min-height:32px;">Edit</button>
-            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Delete?')">
+            <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" data-secure-delete>
                 @csrf @method('DELETE')
-                <button class="text-xs px-3 py-1 rounded-sm bg-red-600 text-white">Delete</button>
+                <button type="submit" class="btn-secure-delete text-xs px-3 py-1 rounded-sm bg-red-600 text-white">Delete</button>
             </form>
         </div>
     </div>

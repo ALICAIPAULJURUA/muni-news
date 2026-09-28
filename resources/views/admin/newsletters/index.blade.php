@@ -33,7 +33,7 @@
                         @if($nl->file_path)<a href="{{ asset('storage/'.$nl->file_path) }}" target="_blank" class="text-xs px-2 py-1 rounded-sm border">View PDF</a>@endif
                         <a href="{{ route('newsletters.show', $nl->slug) }}" target="_blank" class="text-xs px-2 py-1 rounded-sm border ms-1">View</a>
                         <a href="{{ route('admin.newsletters.edit', $nl) }}" class="text-xs px-2 py-1 rounded-sm ms-1" style="background: var(--muni-blue); color:#fff;">Edit</a>
-                        <form method="POST" action="{{ route('admin.newsletters.destroy', $nl) }}" class="inline" onsubmit="return confirm('Delete?')">@csrf @method('DELETE') <button class="text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
+                        <form method="POST" action="{{ route('admin.newsletters.destroy', $nl) }}" class="inline" data-secure-delete>@csrf @method('DELETE') <button type="submit" class="btn-secure-delete text-xs px-2 py-1 rounded-sm bg-red-600 text-white">Delete</button></form>
                     </td>
                 </tr>
                 @empty
