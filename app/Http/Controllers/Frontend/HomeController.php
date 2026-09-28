@@ -54,11 +54,12 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        // Category highlights: each category with 4 latest (exclude events, which has its own page)
+        // Category highlights: each category with 4 latest (exclude events, which has its own page,
+        // and hide Research, Student Stories, Staff Stories from the public UI)
         $categories = Category::with(['articles' => function ($q) {
             $q->where('is_published', true)->latest('published_at')->take(4);
         }])
-            ->whereNotIn('slug', ['news', 'events'])
+            ->whereNotIn('slug', ['news', 'events', 'research', 'student-stories', 'staff-stories'])
             ->orderBy('sort_order')
             ->get();
 

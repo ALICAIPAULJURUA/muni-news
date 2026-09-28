@@ -31,7 +31,7 @@ class ArticleController extends Controller
         }
 
         $articles = $query->paginate(9)->withQueryString();
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::whereNotIn('slug', ['news', 'events', 'research', 'student-stories', 'staff-stories'])->orderBy('sort_order')->get();
 
         return view('frontend.articles.index', compact('articles', 'categories'));
     }
@@ -46,7 +46,7 @@ class ArticleController extends Controller
             ->latest('published_at')
             ->paginate(9);
 
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::whereNotIn('slug', ['news', 'events', 'research', 'student-stories', 'staff-stories'])->orderBy('sort_order')->get();
 
         return view('frontend.articles.category', compact('category', 'articles', 'categories'));
     }
