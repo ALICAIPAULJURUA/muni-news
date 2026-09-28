@@ -53,12 +53,59 @@
         .lead { font-size:1.15rem; border-left:4px solid var(--muni-gold); padding-left:1rem; color: var(--color-text-secondary); }
         blockquote { border-left:4px solid var(--muni-red); padding-left:1rem; font-family: var(--font-heading); font-style:italic; color: var(--color-text-secondary); }
         .article-content img { max-width:100%; height:auto; display:block; margin:1.5rem auto; box-shadow: var(--shadow-md); border-radius:2px; }
-        .article-content { max-width:75ch; line-height:1.8; }
+        .article-content { max-width:75ch; line-height:1.8; overflow-x:auto; }
         @media (max-width:768px){ .article-content{ max-width:100%; } }
         /* Accessibility */
         a:focus-visible, button:focus-visible { outline:2px solid var(--muni-blue); outline-offset:2px; }
         /* Transitions */
         * { scrollbar-width: thin; }
+
+        /* ========================================
+           GLOBAL RESPONSIVE & OVERFLOW FIXES
+           ======================================== */
+
+        /* 1. Prevent global horizontal scrolling */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* 2. Keep images, videos and iframes inside their containers */
+        img, video, iframe, object, embed {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* 3. Tame wide TinyMCE tables so they scroll inside the article */
+        table {
+            max-width: 100% !important;
+            border-collapse: collapse;
+        }
+        .article-content table, .prose table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* 4. Break long words, URLs and code so nothing outgrows the viewport */
+        p, a, li, h1, h2, h3, h4, h5, h6 {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        pre, code {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        /* 5. Let flex/grid children shrink instead of stretching their parent */
+        .flex > *, .grid > * {
+            min-width: 0;
+        }
+        .flex-wrap > * {
+            min-width: 0;
+        }
     </style>
     @stack('styles')
     @yield('head')
