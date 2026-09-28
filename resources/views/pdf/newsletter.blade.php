@@ -70,11 +70,11 @@
     </div>
 
     <div class="content">
-        @if($newsletter->image() && file_exists(public_path('storage/' . $newsletter->image())))
-            <img src="{{ public_path('storage/' . $newsletter->image()) }}" alt="{{ $newsletter->title }}">
+        @if($featuredImagePath)
+            <img src="{{ $featuredImagePath }}" alt="{{ $newsletter->title }}" style="max-width: 100%; height: auto; margin: 15px 0;">
         @endif
         
-        {!! $newsletter->content !!}
+        {!! $processedContent !!}
     </div>
 
     <div class="footer">

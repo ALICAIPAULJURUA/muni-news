@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Newsletter;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class NewsletterSocialsSmokeTest extends TestCase
@@ -70,6 +71,26 @@ class NewsletterSocialsSmokeTest extends TestCase
         $resp->assertHeader('Content-Type', 'application/pdf');
         $resp->assertHeader('Content-Disposition', 'attachment; filename=Muni-Newsletter-' . $nl->slug . '.pdf');
         $resp->assertSee('PDF-', false);
+    }
+
+    public function test_pdf_rewrites_storage_urls_to_local_paths(): void
+    {
+        Storage::disk('public')->put(
+            'newsletters/pdf-test.png',
+            base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==')
+        );
+
+        $nl = $this->makeNewsletter([
+            'title' => 'Image Rich Issue',
+            'featured_image' => 'newsletters/pdf-test.png',
+            'content' => '<p>Before</p><img src="' . url('/') . '/storage/newsletters/pdf-test.png" alt="Inline"><p>After</p>',
+        ]);
+
+        $resp = $this->get(route('newsletters.pdf', $nl->slug));
+        $resp->assertOk();
+        $resp->assertHeader('Content-Type', 'application/pdf');
+
+        Storage::disk('public')->delete('newsletters/pdf-test.png');
     }
 
     public function test_homepage_shows_latest_published_newsletters(): void

@@ -68,7 +68,58 @@ class NewsletterController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $pdf = Pdf::loadView('pdf.newsletter', compact('newsletter'));
+        // Raw HTML content (TinyMCE body or plain description).
+        $htmlContent = $newsletter->content ?: $newsletter->description ?: '';
+
+        // Dompdf cannot fetch images over HTTP(S), so rewrite every storage-hosted
+        // image (absolute URLs like https://news.muni.ac.ug/storage/... and relative
+        // /storage/... paths) to the local file path under /public/storage. A single
+        // pass avoids double-replacing the origin and the /storage/ prefix.
+        $siteUrl = preg_replace('#/+\z#', '', url('/'));
+        $storageDir = rtrim(str_replace('\\', '/', public_path('storage')), '/');
+
+        $htmlContent = preg_replace_callback(
+            '#(src|href|poster|background)\s*=\s*"([^"]+)"#i',
+            function (array $m) use ($siteUrl, $storageDir) {
+                $url = trim($m[2]);
+
+                // Reject any data URIs / empty srcs.
+                if (preg_match('#^data:#i', $url)) {
+                    return $m[0];
+                }
+
+                // Strip the site origin when it is present.
+                if (str_starts_with($url, $siteUrl)) {
+                    $url = substr($url, strlen($siteUrl));
+                }
+
+                // Drop any cache-busting query/fragment suffixes.
+                $url = preg_replace('~[?#].*\z~', '', $url);
+
+                if (preg_match('#^/storage/(.+)$#', $url, $path)) {
+                    return $m[1] . '="' . $storageDir . '/' . $path[1] . '"';
+                }
+
+                return $m[0];
+            },
+            $htmlContent
+        );
+
+        // Featured image: resolve to its local file path for Dompdf.
+        $featuredImagePath = '';
+        $featuredImage = $newsletter->image();
+        if ($featuredImage) {
+            $candidate = public_path('storage/' . $featuredImage);
+            if (file_exists($candidate)) {
+                $featuredImagePath = str_replace('\\', '/', $candidate);
+            }
+        }
+
+        $pdf = Pdf::loadView('pdf.newsletter', [
+            'newsletter' => $newsletter,
+            'processedContent' => $htmlContent,
+            'featuredImagePath' => $featuredImagePath,
+        ]);
         $pdf->setPaper('A4', 'portrait');
 
         $filename = 'Muni-Newsletter-' . $newsletter->slug . '.pdf';
