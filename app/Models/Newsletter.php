@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Str;
 
 class Newsletter extends Model
 {
@@ -58,5 +59,17 @@ class Newsletter extends Model
     public function image(): ?string
     {
         return $this->featured_image ?: $this->cover_image;
+    }
+
+    public function excerpt(int $limit = 120): string
+    {
+        $text = $this->content ?: $this->description ?: '';
+        // Strip <style> / <script> blocks entirely (content, not just tags) so
+        // embedded CSS/JS never leaks as visible text in cards.
+        $text = preg_replace('/<(style|script)\b[^>]*>.*?<\/\1>/is', ' ', $text);
+        // Insert spacing at block-level boundaries so words don't get glued together.
+        $text = preg_replace('/<\/(p|div|h[1-6]|li|br|section|article|blockquote)>/i', ' ', $text);
+        $text = trim(preg_replace('/\s+/', ' ', strip_tags($text)));
+        return Str::limit($text, $limit);
     }
 }

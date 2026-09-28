@@ -179,6 +179,26 @@ class NewsletterSocialsSmokeTest extends TestCase
         $resp->assertSee("href=\"" . route('newsletters.show', $newsletter->slug) . "\"", false);
     }
 
+    public function test_newsletter_cards_do_not_leak_embedded_css_text(): void
+    {
+        $user = User::factory()->create();
+        $this->makeNewsletter([
+            'title' => 'Styled Digest',
+            'content' => "<style>\n"
+                . "/* ============ 1. CSS VARIABLES ============ */\n"
+                . ".root-vars { color: #8B0000; }\n"
+                . "</style>\n"
+                . "<p>Readable issue body appears here.</p>",
+            'author_id' => $user->id,
+        ]);
+
+        $resp = $this->get(route('newsletters.index'));
+        $resp->assertOk();
+        $resp->assertSee('Readable issue body appears here.');
+        $resp->assertDontSee('CSS VARIABLES');
+        $resp->assertDontSee('.root-vars');
+    }
+
     public function test_style_and_script_tags_are_preserved_from_admin_newsletter_to_frontend(): void
     {
         foreach (['super_admin', 'comm_admin', 'editor', 'viewer'] as $role) {

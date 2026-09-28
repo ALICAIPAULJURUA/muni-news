@@ -41,7 +41,7 @@
                     <span class="text-xs text-gray-500">{{ $nl->created_at?->format('M d, Y') }}</span>
                 </div>
                 <h2 class="card-title text-base flex-1"><a href="{{ route('newsletters.show', $nl->slug) }}" class="hover:text-[var(--muni-red)]">{{ $nl->title }}</a></h2>
-                <p class="card-excerpt mt-2">{{ Str::limit(strip_tags($nl->content ?: $nl->description ?: ''), 120) }}</p>
+                <p class="card-excerpt mt-2">{{ $nl->excerpt(120) }}</p>
                 <div class="mt-3 flex items-center gap-3 text-xs text-gray-500">
                     <span><i class="fa-regular fa-calendar me-1"></i>{{ $nl->publication_year }}</span>
                     @if($nl->file_path)
