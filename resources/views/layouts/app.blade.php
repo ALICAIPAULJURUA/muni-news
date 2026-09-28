@@ -45,6 +45,93 @@
         .btn-muni:hover { background: var(--muni-red-dark); color:#fff; }
         .btn-muni:focus { outline:2px solid var(--muni-blue); outline-offset:2px; }
         .newsletter-band { background: var(--muni-red); color:#fff; }
+        /* Newsletter CTA premium layered pattern (unique to this section) */
+        .newsletter-cta-premium {
+            position: relative;
+            background-color: #8B0000; /* Muni Red base */
+            background-image:
+                /* Layer 1: subtle diagonal gold lines (academic texture) */
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(255, 222, 0, 0.06) 35px,
+                    rgba(255, 222, 0, 0.06) 36px
+                ),
+                /* Layer 2: soft radial gold glow (depth, draws the eye) */
+                radial-gradient(
+                    ellipse at center,
+                    rgba(255, 222, 0, 0.15) 0%,
+                    transparent 70%
+                ),
+                /* Layer 3: faint white dot grid (premium editorial feel) */
+                radial-gradient(
+                    circle at 20px 20px,
+                    rgba(255, 255, 255, 0.08) 2px,
+                    transparent 2px
+                ),
+                /* Layer 4: dark vignette at edges (focus on centre) */
+                radial-gradient(
+                    ellipse at center,
+                    transparent 40%,
+                    rgba(0, 0, 0, 0.25) 100%
+                );
+            background-size:
+                auto,      /* diagonal lines */
+                100% 100%, /* radial glow */
+                40px 40px, /* dot grid */
+                100% 100%; /* vignette */
+            background-position:
+                center,
+                center,
+                top left,
+                center;
+            overflow: hidden;
+        }
+        /* Keep text crisp and readable over the pattern */
+        .newsletter-cta-premium h2,
+        .newsletter-cta-premium h3,
+        .newsletter-cta-premium p,
+        .newsletter-cta-premium label {
+            position: relative;
+            z-index: 2;
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        /* Elevate the form elements for better contrast */
+        .newsletter-cta-premium input[type="email"] {
+            position: relative;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.97);
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .newsletter-cta-premium button {
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* Subtle animated shimmer for a premium living feel */
+        .newsletter-cta-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 222, 0, 0.08), transparent);
+            animation: shimmer 8s infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        /* Respect users who prefer reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .newsletter-cta-premium::before { animation: none; }
+        }
         .footer-muni { background: #1a1a1a; color:#cbd5e0; }
         .footer-muni a { color:#e2e8f0; }
         .footer-muni a:hover { color: var(--muni-gold); }
@@ -215,7 +302,7 @@
     </main>
 
     <!-- Newsletter CTA Band -->
-    <section id="subscribe" class="newsletter-band py-10 px-4 mt-12">
+    <section id="subscribe" class="newsletter-band newsletter-cta-premium py-10 px-4 mt-12">
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 items-center">
             <div>
                 <h2 class="text-2xl font-bold" style="font-family:var(--font-heading);">Stay Informed</h2>
