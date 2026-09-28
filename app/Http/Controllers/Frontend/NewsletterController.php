@@ -23,7 +23,7 @@ class NewsletterController extends Controller
             ->when($selectedYear, fn($q) => $q->where('publication_year', $selectedYear))
             ->orderByDesc('publication_year')
             ->latest()
-            ->paginate(10)
+            ->paginate(9)
             ->withQueryString();
 
         return view('frontend.newsletters.index', compact('newsletters', 'years', 'selectedYear'));

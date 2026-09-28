@@ -163,6 +163,22 @@ class NewsletterSocialsSmokeTest extends TestCase
         $newsletters->assertDontSee('Exclusive Campus News Story');
     }
 
+    public function test_newsletters_index_uses_news_card_grid(): void
+    {
+        $user = User::factory()->create();
+        $newsletter = $this->makeNewsletter(['title' => 'Campus Digest', 'author_id' => $user->id]);
+
+        $resp = $this->get(route('newsletters.index'));
+        $resp->assertOk();
+        $resp->assertSee('grid md:grid-cols-2 lg:grid-cols-3 gap-6');
+        $resp->assertSee('class="card-muni"', false);
+        $resp->assertSee('Campus Digest');
+        $resp->assertSee('Newsletter');
+        $resp->assertSee('card-title');
+        $resp->assertSee('card-excerpt');
+        $resp->assertSee("href=\"" . route('newsletters.show', $newsletter->slug) . "\"", false);
+    }
+
     public function test_style_and_script_tags_are_preserved_from_admin_newsletter_to_frontend(): void
     {
         foreach (['super_admin', 'comm_admin', 'editor', 'viewer'] as $role) {
