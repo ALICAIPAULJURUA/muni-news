@@ -49,6 +49,29 @@ class NewsletterSocialsSmokeTest extends TestCase
         $resp->assertSee('Likes');
     }
 
+    public function test_newsletter_show_page_has_download_as_pdf_button(): void
+    {
+        $nl = $this->makeNewsletter();
+
+        $resp = $this->get(route('newsletters.show', $nl->slug));
+        $resp->assertOk();
+        $resp->assertSee(route('newsletters.pdf', $nl->slug));
+        $resp->assertSee('Download as PDF');
+    }
+
+    public function test_newsletter_branded_pdf_downloads_as_pdf(): void
+    {
+        $nl = $this->makeNewsletter([
+            'content' => '<h2>Inside Story</h2><p>Hello content</p>',
+        ]);
+
+        $resp = $this->get(route('newsletters.pdf', $nl->slug));
+        $resp->assertOk();
+        $resp->assertHeader('Content-Type', 'application/pdf');
+        $resp->assertHeader('Content-Disposition', 'attachment; filename=Muni-Newsletter-' . $nl->slug . '.pdf');
+        $resp->assertSee('PDF-', false);
+    }
+
     public function test_homepage_shows_latest_published_newsletters(): void
     {
         $user = User::factory()->create();

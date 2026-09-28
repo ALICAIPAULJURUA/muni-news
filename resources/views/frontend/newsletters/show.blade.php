@@ -20,6 +20,11 @@
             <span>•</span>
             <span><i class="fa-solid fa-download me-1"></i>{{ $newsletter->download_count }} downloads</span>
         </div>
+        <div class="mt-6">
+            <a href="{{ route('newsletters.pdf', $newsletter->slug) }}" class="inline-flex items-center gap-2 btn-muni" style="border:2px solid var(--muni-gold);">
+                <i class="fa-solid fa-file-pdf"></i> Download as PDF
+            </a>
+        </div>
     </header>
 
     {{-- Featured image --}}

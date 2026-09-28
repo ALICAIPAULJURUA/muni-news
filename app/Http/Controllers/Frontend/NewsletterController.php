@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Newsletter;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -59,5 +60,19 @@ class NewsletterController extends Controller
             abort(404);
         }
         return response()->download($path);
+    }
+
+    public function downloadPdf(string $slug)
+    {
+        $newsletter = Newsletter::published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('pdf.newsletter', compact('newsletter'));
+        $pdf->setPaper('A4', 'portrait');
+
+        $filename = 'Muni-Newsletter-' . $newsletter->slug . '.pdf';
+
+        return $pdf->download($filename);
     }
 }

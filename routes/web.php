@@ -20,6 +20,7 @@ Route::get('/article/{slug}', [ArticleController::class, 'show'])->middleware('t
 Route::get('/category/{slug}', [ArticleController::class, 'category'])->name('category.show');
 Route::get('/newsletters', [NewsletterController::class, 'index'])->name('newsletters.index');
 Route::get('/newsletters/{slug}', [NewsletterController::class, 'show'])->name('newsletters.show');
+Route::get('/newsletters/{slug}/download-pdf', [NewsletterController::class, 'downloadPdf'])->name('newsletters.pdf');
 Route::get('/newsletters/{newsletter}/download', [NewsletterController::class, 'download'])->name('newsletters.download');
 Route::get('/events', [App\Http\Controllers\Frontend\EventController::class, 'index'])->name('events.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
