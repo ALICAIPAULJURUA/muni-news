@@ -60,7 +60,7 @@ class NewsletterSocialsSmokeTest extends TestCase
         $resp->assertSee('Latest Newsletters');
         $resp->assertSee('Summer Bulletin');
         $resp->assertDontSee('Draft Issue');
-        $resp->assertSee('newsletter-cta-flat-pattern');
+        $resp->assertSee('newsletter-cta-section');
         $resp->assertSee('Stay Informed');
     }
 

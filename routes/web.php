@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:super_admin|comm_admin|editor'])->prefix('admin
         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->only(['index','store','update','destroy']);
         Route::resource('newsletters', \App\Http\Controllers\Admin\NewsletterAdminController::class)->only(['index','create','store','edit','update','destroy']);
         Route::resource('downloads', \App\Http\Controllers\Admin\DownloadAdminController::class)->only(['index','create','store','edit','update','destroy']);
+        Route::resource('patterns', \App\Http\Controllers\Admin\PatternController::class)->only(['index','create','store','edit','update','destroy']);
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class,'index'])->name('settings.index');
         Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class,'update'])->name('settings.update');
         Route::post('/settings/test-email', [\App\Http\Controllers\Admin\SettingController::class,'testEmail'])->name('settings.test-email');

@@ -59,6 +59,9 @@
                     @hasanyrole('super_admin|comm_admin')
                     <a href="{{ route('admin.users.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"><i class="fa-solid fa-users w-5 text-center"></i> Users @role('super_admin')<span class="ml-auto text-xs bg-white/20 px-2 py-0.5 rounded-sm">Admin</span>@endrole</a>
                     @endhasanyrole
+                    @hasanyrole('super_admin|comm_admin')
+                    <a href="{{ route('admin.patterns.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm {{ request()->routeIs('admin.patterns.*') ? 'active' : '' }}"><i class="fa-solid fa-border-all w-5 text-center"></i> Section Patterns</a>
+                    @endhasanyrole
                     <a href="{{ route('admin.subscribers.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm {{ request()->routeIs('admin.subscribers.*') ? 'active' : '' }}"><i class="fa-solid fa-envelope w-5 text-center"></i> Subscribers</a>
                     <a href="{{ route('admin.reports.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}"><i class="fa-solid fa-chart-line w-5 text-center"></i> Reports</a>
                 </div>
@@ -86,6 +89,7 @@
                 <a href="{{ route('admin.events.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-calendar-days w-5"></i> Events</a>
                 <a href="{{ route('admin.newsletters.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-file-pdf w-5"></i> Newsletters</a>
                 <a href="{{ route('admin.downloads.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-download w-5"></i> Downloads</a>
+                <a href="{{ route('admin.patterns.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-border-all w-5"></i> Section Patterns</a>
                 <a href="{{ route('admin.users.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-users w-5"></i> Users</a>
                 <a href="{{ route('admin.media.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-photo-film w-5"></i> Media Library</a>
                 <a href="{{ route('admin.comments.index') }}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm"><i class="fa-solid fa-comments w-5"></i> Comments</a>

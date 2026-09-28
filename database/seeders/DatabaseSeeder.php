@@ -119,5 +119,22 @@ class DatabaseSeeder extends Seeder
                 ['value' => $setting['value']]
             );
         }
+
+        // 7. Default Section Patterns (slugs used by frontend sections)
+        $defaultSections = [
+            ['section_slug' => 'newsletter_cta', 'section_name' => 'Newsletter CTA Section'],
+            ['section_slug' => 'hero', 'section_name' => 'Hero Section'],
+            ['section_slug' => 'footer', 'section_name' => 'Footer'],
+            ['section_slug' => 'about_header', 'section_name' => 'About Page Header'],
+        ];
+
+        foreach ($defaultSections as $section) {
+            \App\Models\SectionPattern::firstOrCreate(['section_slug' => $section['section_slug']], [
+                'section_name' => $section['section_name'],
+                'opacity' => 0.15,
+                'blend_mode' => 'multiply',
+                'is_active' => true,
+            ]);
+        }
     }
 }

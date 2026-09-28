@@ -45,40 +45,6 @@
         .btn-muni:hover { background: var(--muni-red-dark); color:#fff; }
         .btn-muni:focus { outline:2px solid var(--muni-blue); outline-offset:2px; }
         .newsletter-band { background: var(--muni-red); color:#fff; }
-        /* Newsletter CTA flat, seamless geometric pattern on solid red (unique to this section) */
-        .newsletter-cta-flat-pattern {
-            position: relative;
-            /* 1. Solid Muni Red base - NO gradients */
-            background-color: #8B0000;
-            /* 2. Flat, seamless, subtle geometric pattern (small crosses/blocks) at 6% opacity */
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffde00' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-size: 60px 60px;
-            background-position: center;
-            overflow: hidden;
-        }
-        /* Ensure text remains crisp and perfectly readable over the flat pattern */
-        .newsletter-cta-flat-pattern h2,
-        .newsletter-cta-flat-pattern h3,
-        .newsletter-cta-flat-pattern p,
-        .newsletter-cta-flat-pattern label {
-            position: relative;
-            z-index: 2;
-            color: #ffffff;
-            /* Slight text shadow just to ensure maximum readability against the pattern */
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-        }
-        /* Elevate form elements for a clean, modern contrast */
-        .newsletter-cta-flat-pattern input[type="email"] {
-            position: relative;
-            z-index: 2;
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(255, 222, 0, 0.2);
-        }
-        .newsletter-cta-flat-pattern button {
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
         .footer-muni { background: #1a1a1a; color:#cbd5e0; }
         .footer-muni a { color:#e2e8f0; }
         .footer-muni a:hover { color: var(--muni-gold); }
@@ -249,18 +215,23 @@
     </main>
 
     <!-- Newsletter CTA Band -->
-    <section id="subscribe" class="newsletter-band newsletter-cta-flat-pattern py-10 px-4 mt-12">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 items-center">
-            <div>
-                <h2 class="text-2xl font-bold" style="font-family:var(--font-heading);">Stay Informed</h2>
-                <p class="mt-2 opacity-90">Subscribe to Muni University newsletter and never miss an update from the campus.</p>
+    <section id="subscribe" class="newsletter-band newsletter-cta-section py-10 px-4 mt-12" style="background-color:#8B0000; position:relative; overflow:hidden;">
+        @if(isset($activePatterns['newsletter_cta']) && $activePatterns['newsletter_cta']->image_path)
+        <div class="pattern-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background-image:url('{{ asset('storage/' . $activePatterns['newsletter_cta']->image_path) }}'); background-size:cover; background-position:center; background-repeat:no-repeat; opacity:{{ $activePatterns['newsletter_cta']->opacity }}; mix-blend-mode:{{ $activePatterns['newsletter_cta']->blend_mode }}; pointer-events:none; z-index:1;"></div>
+        @endif
+        <div style="position:relative; z-index:2;">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 items-center">
+                <div>
+                    <h2 class="text-2xl font-bold" style="font-family:var(--font-heading);">Stay Informed</h2>
+                    <p class="mt-2 opacity-90">Subscribe to Muni University newsletter and never miss an update from the campus.</p>
+                </div>
+                <form action="{{ route('subscribe') }}" method="POST" class="flex gap-2 max-w-md ms-auto w-full">
+                    @csrf
+                    <label for="subscribe_email" class="sr-only">Email</label>
+                    <input type="email" name="email" id="subscribe_email" required placeholder="Your email address" class="flex-1 rounded-sm px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--muni-gold)]" style="min-height:44px; border-radius:2px;">
+                    <button type="submit" class="bg-white font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-100" style="color: var(--muni-red); min-height:44px; border-radius:2px;">Subscribe</button>
+                </form>
             </div>
-            <form action="{{ route('subscribe') }}" method="POST" class="flex gap-2 max-w-md ms-auto w-full">
-                @csrf
-                <label for="subscribe_email" class="sr-only">Email</label>
-                <input type="email" name="email" id="subscribe_email" required placeholder="Your email address" class="flex-1 rounded-sm px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--muni-gold)]" style="min-height:44px; border-radius:2px;">
-                <button type="submit" class="bg-white font-bold uppercase text-xs tracking-wider px-6 py-3 rounded-sm hover:bg-gray-100" style="color: var(--muni-red); min-height:44px; border-radius:2px;">Subscribe</button>
-            </form>
         </div>
     </section>
 
