@@ -28,6 +28,8 @@ Route::get('/media-gallery', [MediaController::class, 'index'])->name('gallery.i
 Route::get('/downloads', [DownloadController::class, 'index'])->name('downloads.index');
 Route::get('/downloads/{download}/file', [DownloadController::class, 'download'])->name('downloads.download');
 Route::post('/subscribe', [SubscribeController::class, 'store'])->middleware('throttle:3,1')->name('subscribe');
+Route::get('/unsubscribe/{email}', [\App\Http\Controllers\UnsubscribeController::class, 'show'])->middleware('signed')->name('unsubscribe.show');
+Route::post('/unsubscribe/{email}', [\App\Http\Controllers\UnsubscribeController::class, 'process'])->middleware('signed')->name('unsubscribe.process');
 Route::post('/comments', [FrontendCommentController::class, 'store'])->name('comments.store');
 Route::post('/like', [\App\Http\Controllers\Frontend\LikeController::class, 'store'])->middleware('auth')->name('like.store');
 Route::delete('/like/{like}', [\App\Http\Controllers\Frontend\LikeController::class, 'destroy'])->middleware('auth')->name('like.destroy');
